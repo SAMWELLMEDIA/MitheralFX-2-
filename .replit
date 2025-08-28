@@ -1,0 +1,25 @@
+modules = ["nodejs-20"]
+run = "npm install && node server.js"
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+run = ["sh", "-c", "node server.js"]
+build = ["sh", "-c", "npm install"]
+
+[workflows]
+runButton = "Start Backend Server"
+
+[[workflows.workflow]]
+name = "Start Backend Server"
+author = 42114129
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
