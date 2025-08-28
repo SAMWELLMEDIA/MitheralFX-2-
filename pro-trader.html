@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Trader - MitheralFX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-main: #0a0b1e;
+      --bg-secondary: #151933;
+      --card-bg: #1a1f3a;
+      --btn-bg: #ffcc00;
+      --btn-hover: #ffd633;
+      --text-primary: #ffffff;
+      --text-secondary: #ffcc00;
+      --text-muted: #a0a9c9;
+      --highlight: #ffcc00;
+      --success: #10b981;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --rounded: 16px;
+      --glass: rgba(255, 255, 255, 0.05);
+      --border: #2a3050;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .pro-section {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pro-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--btn-bg), #ffd633);
+      color: #000;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: var(--rounded);
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pro-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .pro-btn:hover::before {
+      left: 100%;
+    }
+
+    .pro-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.4);
+    }
+
+    .user-stats {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease-out 0.6s both;
+    }
+
+    .user-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      transition: var(--transition);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .user-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--info), var(--text-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--bg-main);
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .user-profit {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .user-rank {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .leaderboard-section {
+      margin-bottom: 3rem;
+      animation: fadeIn 1s ease-out 0.9s both;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 0.25rem;
+    }
+
+    .filter-tab {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-muted);
+    }
+
+    .filter-tab:hover {
+      color: var(--text-primary);
+    }
+
+    .filter-tab.active {
+      background: var(--btn-bg);
+      color: #000;
+    }
+
+    .leaderboard {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    .leaderboard-header {
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 120px 120px;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 120px 120px;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      align-items: center;
+      transition: var(--transition);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .leaderboard-row:last-child {
+      border-bottom: none;
+    }
+
+    .leaderboard-row:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .rank {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .rank.first {
+      color: #fbbf24;
+    }
+
+    .rank.second {
+      color: #d1d5db;
+    }
+
+    .rank.third {
+      color: #f97316;
+    }
+
+    .trader-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .trader-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--info), var(--text-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--bg-main);
+      flex-shrink: 0;
+    }
+
+    .trader-name {
+      font-weight: 600;
+    }
+
+    .trader-flag {
+      font-size: 1.2rem;
+    }
+
+    .profit-value {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .profit-value.positive {
+      color: var(--success);
+    }
+
+    .profit-value.negative {
+      color: var(--danger);
+    }
+
+    .trades-count {
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .win-rate {
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .win-rate.high {
+      color: var(--success);
+    }
+
+    .win-rate.medium {
+      color: var(--text-secondary);
+    }
+
+    .win-rate.low {
+      color: var(--danger);
+    }
+
+    .no-data {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 3rem 1rem;
+      font-size: 1.1rem;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--btn-bg);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      animation: fadeIn 1s ease-out 1.2s both;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      
+      .leaderboard-header,
+      .leaderboard-row {
+        grid-template-columns: 50px 1fr 100px;
+        gap: 0.75rem;
+      }
+      
+      .trades-count,
+      .win-rate {
+        display: none;
+      }
+      
+      .user-card {
+        padding: 1.2rem 1.5rem;
+      }
+      
+      .user-profit {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Top Trader</h1>
+      <p class="description">
+        Traders with the highest profit history. This list updates 
+        <span class="live-indicator">
+          <span class="live-dot"></span>
+          <span>live</span>
+        </span>
+      </p>
+    </div>
+
+    <div class="pro-section">
+      <a href="pro-reg.html" class="pro-btn">
+        <i class="fas fa-rocket"></i>
+        <span>Become A Pro!</span>
+      </a>
+    </div>
+
+    <div class="user-stats">
+      <div class="user-card">
+        <div class="user-avatar">S</div>
+        <div class="user-info">
+          <div class="user-label">Your Profit</div>
+          <div class="user-profit">$87,540.75</div>
+        </div>
+        <div class="user-rank">#3</div>
+      </div>
+    </div>
+
+    <div class="leaderboard-section">
+      <div class="section-header">
+        <h2>Top 50 Traders</h2>
+        <div class="filter-tabs">
+          <div class="filter-tab active" data-filter="all">All Time</div>
+          <div class="filter-tab" data-filter="monthly">Monthly</div>
+          <div class="filter-tab" data-filter="weekly">Weekly</div>
+        </div>
+      </div>
+
+      <div class="leaderboard" id="leaderboard">
+        <div class="leaderboard-header">
+          <div>Rank</div>
+          <div>Trader</div>
+          <div>Profit</div>
+          <div>Trades</div>
+          <div>Win Rate</div>
+        </div>
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Leaderboard updates every 60 seconds</p>
+    </div>
+  </div>
+
+  <script>
+    const traders = [
+      { name: "Alex Johnson", profit: 125430.50, trades: 342, winRate: 78, country: "us" },
+      { name: "Maria Garcia", profit: 98760.25, trades: 287, winRate: 72, country: "es" },
+      { name: "Samwell Media", profit: 87540.75, trades: 198, winRate: 81, country: "sm" },
+      { name: "Sarah Chen", profit: 76530.00, trades: 256, winRate: 75, country: "cn" },
+      { name: "Michael Brown", profit: 65420.30, trades: 178, winRate: 69, country: "ca" },
+      { name: "Emma Davis", profit: 54310.90, trades: 203, winRate: 73, country: "au" },
+      { name: "David Miller", profit: 43200.60, trades: 167, winRate: 68, country: "us" },
+      { name: "Olivia Taylor", profit: 32190.40, trades: 145, winRate: 71, country: "gb" },
+      { name: "Robert Anderson", profit: 21080.20, trades: 132, winRate: 65, country: "de" },
+      { name: "Sophia Thomas", profit: 19870.80, trades: 124, winRate: 67, country: "fr" }
+    ];
+
+    // Country flag emojis
+    const countryFlags = {
+      "us": "🇺🇸",
+      "es": "🇪🇸",
+      "sm": "🇬🇧",
+      "cn": "🇨🇳",
+      "ca": "🇨🇦",
+      "au": "🇦🇺",
+      "de": "🇩🇪",
+      "fr": "🇫🇷"
+    };
+
+    const leaderboard = document.getElementById('leaderboard');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    let currentFilter = 'all';
+
+    function initLeaderboard() {
+      setTimeout(() => {
+        renderLeaderboard(traders);
+        
+        setInterval(() => {
+          updateTraderProfits();
+          renderLeaderboard(traders);
+        }, 60000);
+      }, 1500);
+    }
+
+    function renderLeaderboard(data) {
+      let html = `
+        <div class="leaderboard-header">
+          <div>Rank</div>
+          <div>Trader</div>
+          <div>Profit</div>
+          <div>Trades</div>
+          <div>Win Rate</div>
+        </div>
+      `;
+
+      if (data.length === 0) {
+        html += '<div class="no-data">No Active Pro Trader</div>';
+      } else {
+        data.forEach((trader, index) => {
+          const rankClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+          const profitClass = trader.profit >= 0 ? 'positive' : 'negative';
+          const winRateClass = trader.winRate >= 75 ? 'high' : trader.winRate >= 60 ? 'medium' : 'low';
+          
+          html += `
+            <div class="leaderboard-row">
+              <div class="rank ${rankClass}">#${index + 1}</div>
+              <div class="trader-info">
+                <div class="trader-avatar">${trader.name.charAt(0)}</div>
+                <div class="trader-name">${trader.name}</div>
+                <div class="trader-flag">${countryFlags[trader.country] || '🌐'}</div>
+              </div>
+              <div class="profit-value ${profitClass}">$${trader.profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div class="trades-count">${trader.trades}</div>
+              <div class="win-rate ${winRateClass}">${trader.winRate}%</div>
+            </div>
+          `;
+        });
+      }
+
+      leaderboard.innerHTML = html;
+    }
+
+    // Update trader profits (simulate live changes)
+    function updateTraderProfits() {
+      traders.forEach(trader => {
+        // Random profit change between -2% to +2%
+        const changePercent = (Math.random() * 4 - 2) / 100;
+        trader.profit = trader.profit * (1 + changePercent);
+        
+        // Randomly increase trade count
+        if (Math.random() > 0.7) {
+          trader.trades += 1;
+        }
+        
+        // Slightly adjust win rate
+        if (Math.random() > 0.8) {
+          const change = Math.random() > 0.5 ? 1 : -1;
+          trader.winRate = Math.max(40, Math.min(95, trader.winRate + change));
+        }
+      });
+      
+      // Sort by profit
+      traders.sort((a, b) => b.profit - a.profit);
+    }
+
+    // Filter tabs
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        
+        // Show loading
+        leaderboard.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+        
+        // Simulate loading data
+        setTimeout(() => {
+          // For demo purposes, we'll use the same data with slight variations
+          let filteredData = [...traders];
+          
+          if (currentFilter === 'monthly') {
+            // Show only top 5 with reduced profits
+            filteredData = traders.slice(0, 5).map(trader => ({
+              ...trader,
+              profit: trader.profit * 0.3,
+              trades: Math.floor(trader.trades * 0.4)
+            }));
+          } else if (currentFilter === 'weekly') {
+            // Show only top 3 with further reduced profits
+            filteredData = traders.slice(0, 3).map(trader => ({
+              ...trader,
+              profit: trader.profit * 0.1,
+              trades: Math.floor(trader.trades * 0.2)
+            }));
+          }
+          
+          renderLeaderboard(filteredData);
+        }, 800);
+      });
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initLeaderboard);
+  </script>
+</body>
+</html>

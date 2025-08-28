@@ -1,0 +1,39 @@
+
+[
+  {
+    "id": "news-1",
+    "title": "Fed Signals Potential Rate Pause Amid Inflation Concerns",
+    "summary": "The Federal Reserve hints at a possible pause in interest rate hikes as inflation shows signs of cooling.",
+    "category": "Forex",
+    "date": "2024-01-15T14:30:00Z",
+    "impact": "high",
+    "source": "Reuters"
+  },
+  {
+    "id": "news-2",
+    "title": "Bitcoin Reaches New Monthly High at $52,000",
+    "summary": "Bitcoin surges past $52,000 as institutional adoption continues to grow.",
+    "category": "Crypto",
+    "date": "2024-01-15T10:15:00Z",
+    "impact": "medium",
+    "source": "CoinDesk"
+  },
+  {
+    "id": "news-3",
+    "title": "Gold Prices Rise on Safe-Haven Demand",
+    "summary": "Gold prices climb higher amid geopolitical tensions and market uncertainty.",
+    "category": "Commodities",
+    "date": "2024-01-15T08:45:00Z",
+    "impact": "medium",
+    "source": "Bloomberg"
+  },
+  {
+    "id": "news-4",
+    "title": "EUR/USD Technical Analysis: Bullish Momentum Building",
+    "summary": "EUR/USD shows strong technical indicators pointing to potential upward movement.",
+    "category": "Technical Analysis",
+    "date": "2024-01-15T07:20:00Z",
+    "impact": "low",
+    "source": "FXStreet"
+  }
+]

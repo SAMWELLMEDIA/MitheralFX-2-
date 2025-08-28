@@ -1,0 +1,1001 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - MitheralFX</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #050714;
+      --bg-secondary: #0a0e27;
+      --bg-card: #0f1428;
+      --bg-hover: #151b3d;
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a8b2d1;
+      --text-muted: #64748b;
+      
+      /* Accent Colors */
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --secondary-dark: #7c3aed;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --gold: #ffd700;
+      
+      /* Legacy color mappings */
+      --dark: #0a0e27;
+      --darker: #050714;
+      --light: #ffffff;
+      --card-bg: #0f1428;
+      --card-hover: #151b3d;
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 20px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--bg-primary);
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      width: 280px;
+      background: var(--bg-secondary);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      padding: 2rem 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .sidebar-header {
+      padding: 0 2rem 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      color: var(--light);
+      text-decoration: none;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+      border-left-color: var(--primary);
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    
+    .nav-link i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 2rem;
+    }
+    
+    .header {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+      border-radius: var(--rounded);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .refresh-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .refresh-btn:hover {
+      background: var(--secondary-dark);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+    
+    .stat-card.users::before { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+    .stat-card.trades::before { background: var(--success); }
+    .stat-card.deposits::before { background: var(--secondary); }
+    .stat-card.withdrawals::before { background: var(--warning); }
+    
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .stat-title {
+      font-size: 0.9rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .stat-icon.users { background: rgba(255, 204, 0, 0.15); color: var(--primary); }
+    .stat-icon.trades { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+    .stat-icon.deposits { background: rgba(52, 152, 219, 0.15); color: var(--secondary); }
+    .stat-icon.withdrawals { background: rgba(243, 156, 18, 0.15); color: var(--warning); }
+    
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-change {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .content-card {
+      background: var(--bg-card);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(20px);
+    }
+    
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: between;
+      align-items: center;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .user-list {
+      list-style: none;
+    }
+    
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    
+    .user-item:hover {
+      background: var(--card-hover);
+    }
+    
+    .user-item:last-child {
+      border-bottom: none;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    
+    .user-info h4 {
+      margin-bottom: 0.25rem;
+    }
+    
+    .user-info small {
+      color: #aaa;
+    }
+    
+    .user-balance {
+      margin-left: auto;
+      text-align: right;
+    }
+    
+    .balance-live {
+      color: var(--success);
+      font-weight: 600;
+    }
+    
+    .balance-demo {
+      color: #aaa;
+      font-size: 0.85rem;
+    }
+    
+    .activity-list {
+      list-style: none;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    
+    .activity-icon.login { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+    .activity-icon.trade { background: rgba(52, 152, 219, 0.15); color: var(--secondary); }
+    .activity-icon.deposit { background: rgba(243, 156, 18, 0.15); color: var(--warning); }
+    .activity-icon.withdrawal { background: rgba(231, 76, 60, 0.15); color: var(--danger); }
+    
+    .activity-info h5 {
+      margin-bottom: 0.25rem;
+    }
+    
+    .activity-info small {
+      color: #aaa;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #888;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+    
+    .section-divider {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 240px;
+      }
+      .main-content {
+        margin-left: 240px;
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .section-divider {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+          MitheralFX Admin
+        </div>
+      </div>
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">
+              <i class="fas fa-tachometer-alt"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#users" class="nav-link" onclick="showSection('users')">
+              <i class="fas fa-users"></i>
+              Users
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#trades" class="nav-link" onclick="showSection('trades')">
+              <i class="fas fa-chart-line"></i>
+              Trades
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#financial" class="nav-link" onclick="showSection('financial')">
+              <i class="fas fa-money-bill-wave"></i>
+              Financial
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-panel.html" class="nav-link">
+              <i class="fas fa-sliders-h"></i>
+              Profit/Loss Rules
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="trading-dashboard.html" class="nav-link">
+              <i class="fas fa-arrow-left"></i>
+              Back to Trading
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <div class="header">
+        <h1 class="page-title" id="pageTitle">Admin Dashboard</h1>
+        <button class="refresh-btn" onclick="refreshData()">
+          <i class="fas fa-sync-alt"></i>
+          Refresh Data
+        </button>
+      </div>
+      
+      <!-- Dashboard Section -->
+      <div id="dashboardSection">
+        <div class="stats-grid">
+          <div class="stat-card users">
+            <div class="stat-header">
+              <div class="stat-title">Total Users</div>
+              <div class="stat-icon users">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalUsers">0</div>
+            <div class="stat-change" id="usersChange">Loading...</div>
+          </div>
+          
+          <div class="stat-card trades">
+            <div class="stat-header">
+              <div class="stat-title">Total Trades</div>
+              <div class="stat-icon trades">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalTrades">0</div>
+            <div class="stat-change" id="tradesChange">Loading...</div>
+          </div>
+          
+          <div class="stat-card deposits">
+            <div class="stat-header">
+              <div class="stat-title">Total Deposits</div>
+              <div class="stat-icon deposits">
+                <i class="fas fa-arrow-down"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalDeposits">$0</div>
+            <div class="stat-change" id="depositsChange">Loading...</div>
+          </div>
+          
+          <div class="stat-card withdrawals">
+            <div class="stat-header">
+              <div class="stat-title">Total Withdrawals</div>
+              <div class="stat-icon withdrawals">
+                <i class="fas fa-arrow-up"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalWithdrawals">$0</div>
+            <div class="stat-change" id="withdrawalsChange">Loading...</div>
+          </div>
+        </div>
+        
+        <div class="content-grid">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Users</h2>
+            </div>
+            <div class="card-body">
+              <ul class="user-list" id="recentUsers">
+                <li class="loading">
+                  <i class="fas fa-spinner fa-spin"></i> Loading users...
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Activity</h2>
+            </div>
+            <div class="card-body">
+              <ul class="activity-list" id="recentActivity">
+                <li class="loading">
+                  <i class="fas fa-spinner fa-spin"></i> Loading activities...
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Users Section -->
+      <div id="usersSection" style="display: none;">
+        <div class="content-card">
+          <div class="card-header">
+            <h2 class="card-title">All Users</h2>
+          </div>
+          <div class="card-body">
+            <ul class="user-list" id="allUsers">
+              <li class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading users...
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Trades Section -->
+      <div id="tradesSection" style="display: none;">
+        <div class="section-divider">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Open Trades</h2>
+            </div>
+            <div class="card-body" id="openTrades">
+              <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading trades...
+              </div>
+            </div>
+          </div>
+          
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Closed Trades</h2>
+            </div>
+            <div class="card-body" id="closedTrades">
+              <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading trades...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Financial Section -->
+      <div id="financialSection" style="display: none;">
+        <div class="section-divider">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Deposits</h2>
+            </div>
+            <div class="card-body" id="recentDeposits">
+              <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading deposits...
+              </div>
+            </div>
+          </div>
+          
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Withdrawals</h2>
+            </div>
+            <div class="card-body" id="recentWithdrawals">
+              <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading withdrawals...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="public/js/api.js"></script>
+  <script>
+    let currentSection = 'dashboard';
+    let adminData = {
+      users: [],
+      trades: [],
+      deposits: [],
+      withdrawals: [],
+      activities: []
+    };
+    
+    // Initialize admin dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAdminData();
+      setInterval(refreshData, 30000); // Refresh every 30 seconds
+    });
+    
+    // Load all admin data
+    async function loadAdminData() {
+      try {
+        // Simulate admin API calls (you'll need to add these endpoints to your server)
+        await Promise.all([
+          loadUsers(),
+          loadTrades(),
+          loadDeposits(),
+          loadWithdrawals()
+        ]);
+        
+        updateDashboard();
+        generateRecentActivity();
+      } catch (error) {
+        console.error('Error loading admin data:', error);
+      }
+    }
+    
+    // Load users data
+    async function loadUsers() {
+      try {
+        const response = await fetch('/api/admin/users');
+        if (response.ok) {
+          adminData.users = await response.json();
+        }
+      } catch (error) {
+        console.error('Error loading users:', error);
+        // Fallback to local storage data
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+          adminData.users = [JSON.parse(userData)];
+        }
+      }
+    }
+    
+    // Load trades data
+    async function loadTrades() {
+      try {
+        const response = await fetch('/api/admin/trades');
+        if (response.ok) {
+          adminData.trades = await response.json();
+        }
+      } catch (error) {
+        console.error('Error loading trades:', error);
+        // Fallback to user's own trades if available
+        if (API && API.token) {
+          try {
+            const openTrades = await API.getOpenTrades();
+            const closedTrades = await API.getTradeHistory();
+            adminData.trades = [...openTrades, ...closedTrades];
+          } catch (fallbackError) {
+            console.error('Fallback trade loading failed:', fallbackError);
+          }
+        }
+      }
+    }
+    
+    // Load deposits data
+    async function loadDeposits() {
+      try {
+        const response = await fetch('/api/admin/deposits');
+        if (response.ok) {
+          adminData.deposits = await response.json();
+        }
+      } catch (error) {
+        console.error('Error loading deposits:', error);
+        // Fallback to user's own deposits if available
+        if (API && API.token) {
+          try {
+            adminData.deposits = await API.getDepositHistory();
+          } catch (fallbackError) {
+            console.error('Fallback deposit loading failed:', fallbackError);
+          }
+        }
+      }
+    }
+    
+    // Load withdrawals data
+    async function loadWithdrawals() {
+      try {
+        const response = await fetch('/api/admin/withdrawals');
+        if (response.ok) {
+          adminData.withdrawals = await response.json();
+        }
+      } catch (error) {
+        console.error('Error loading withdrawals:', error);
+        // Fallback to user's own withdrawals if available
+        if (API && API.token) {
+          try {
+            adminData.withdrawals = await API.getWithdrawalHistory();
+          } catch (fallbackError) {
+            console.error('Fallback withdrawal loading failed:', fallbackError);
+          }
+        }
+      }
+    }
+    
+    // Update dashboard statistics
+    function updateDashboard() {
+      // Update user stats
+      document.getElementById('totalUsers').textContent = adminData.users.length;
+      document.getElementById('usersChange').textContent = `${adminData.users.length} registered users`;
+      
+      // Update trade stats
+      const totalTrades = adminData.trades.length;
+      const openTrades = adminData.trades.filter(t => t.status === 'open').length;
+      document.getElementById('totalTrades').textContent = totalTrades;
+      document.getElementById('tradesChange').textContent = `${openTrades} trades currently open`;
+      
+      // Update deposit stats
+      const totalDepositAmount = adminData.deposits.reduce((sum, d) => sum + d.amount, 0);
+      document.getElementById('totalDeposits').textContent = formatCurrency(totalDepositAmount);
+      document.getElementById('depositsChange').textContent = `${adminData.deposits.length} deposit requests`;
+      
+      // Update withdrawal stats
+      const totalWithdrawalAmount = adminData.withdrawals.reduce((sum, w) => sum + w.amount, 0);
+      document.getElementById('totalWithdrawals').textContent = formatCurrency(totalWithdrawalAmount);
+      document.getElementById('withdrawalsChange').textContent = `${adminData.withdrawals.length} withdrawal requests`;
+      
+      // Update user lists
+      updateUsersList();
+      updateTradesView();
+      updateFinancialView();
+    }
+    
+    // Update users list
+    function updateUsersList() {
+      const recentUsersList = document.getElementById('recentUsers');
+      const allUsersList = document.getElementById('allUsers');
+      
+      if (adminData.users.length === 0) {
+        recentUsersList.innerHTML = '<li class="empty-state"><i class="fas fa-users"></i><h3>No Users</h3><p>No registered users found</p></li>';
+        allUsersList.innerHTML = '<li class="empty-state"><i class="fas fa-users"></i><h3>No Users</h3><p>No registered users found</p></li>';
+        return;
+      }
+      
+      const userHTML = adminData.users.map(user => `
+        <li class="user-item">
+          <div class="user-avatar">${user.firstName?.[0] || 'U'}</div>
+          <div class="user-info">
+            <h4>${user.firstName || 'Unknown'} ${user.lastName || 'User'}</h4>
+            <small>${user.email || 'No email'}</small>
+          </div>
+          <div class="user-balance">
+            <div class="balance-live">Live: ${formatCurrency(user.balance?.live || 0)}</div>
+            <div class="balance-demo">Demo: ${formatCurrency(user.balance?.demo || 0)}</div>
+          </div>
+        </li>
+      `).join('');
+      
+      recentUsersList.innerHTML = userHTML;
+      allUsersList.innerHTML = userHTML;
+    }
+    
+    // Update trades view
+    function updateTradesView() {
+      const openTradesEl = document.getElementById('openTrades');
+      const closedTradesEl = document.getElementById('closedTrades');
+      
+      const openTrades = adminData.trades.filter(t => t.status === 'open');
+      const closedTrades = adminData.trades.filter(t => t.status === 'closed').slice(0, 10);
+      
+      if (openTrades.length === 0) {
+        openTradesEl.innerHTML = '<div class="empty-state"><i class="fas fa-chart-line"></i><h3>No Open Trades</h3><p>No trades currently open</p></div>';
+      } else {
+        openTradesEl.innerHTML = openTrades.map(trade => `
+          <div style="padding: 1rem; border-bottom: 1px solid var(--border);">
+            <strong>${trade.symbol}</strong> - ${trade.type.toUpperCase()}<br>
+            <small>Amount: ${formatCurrency(trade.amount)} | Leverage: ${trade.leverage}</small>
+          </div>
+        `).join('');
+      }
+      
+      if (closedTrades.length === 0) {
+        closedTradesEl.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h3>No Closed Trades</h3><p>No recent closed trades</p></div>';
+      } else {
+        closedTradesEl.innerHTML = closedTrades.map(trade => `
+          <div style="padding: 1rem; border-bottom: 1px solid var(--border);">
+            <strong>${trade.symbol}</strong> - ${trade.type.toUpperCase()}<br>
+            <small>P&L: <span style="color: ${trade.pnl >= 0 ? 'var(--success)' : 'var(--danger)'};">${formatCurrency(trade.pnl || 0)}</span></small>
+          </div>
+        `).join('');
+      }
+    }
+    
+    // Update financial view
+    function updateFinancialView() {
+      const recentDepositsEl = document.getElementById('recentDeposits');
+      const recentWithdrawalsEl = document.getElementById('recentWithdrawals');
+      
+      if (adminData.deposits.length === 0) {
+        recentDepositsEl.innerHTML = '<div class="empty-state"><i class="fas fa-money-bill-wave"></i><h3>No Deposits</h3><p>No deposit requests found</p></div>';
+      } else {
+        recentDepositsEl.innerHTML = adminData.deposits.slice(0, 10).map(deposit => `
+          <div style="padding: 1rem; border-bottom: 1px solid var(--border);">
+            <strong>${formatCurrency(deposit.amount)}</strong><br>
+            <small>Status: <span style="color: ${getStatusColor(deposit.status)};">${deposit.status}</span> | ${deposit.method}</small>
+          </div>
+        `).join('');
+      }
+      
+      if (adminData.withdrawals.length === 0) {
+        recentWithdrawalsEl.innerHTML = '<div class="empty-state"><i class="fas fa-money-bill-wave"></i><h3>No Withdrawals</h3><p>No withdrawal requests found</p></div>';
+      } else {
+        recentWithdrawalsEl.innerHTML = adminData.withdrawals.slice(0, 10).map(withdrawal => `
+          <div style="padding: 1rem; border-bottom: 1px solid var(--border);">
+            <strong>${formatCurrency(withdrawal.amount)}</strong><br>
+            <small>Status: <span style="color: ${getStatusColor(withdrawal.status)};">${withdrawal.status}</span> | ${withdrawal.method}</small>
+          </div>
+        `).join('');
+      }
+    }
+    
+    // Generate recent activity
+    function generateRecentActivity() {
+      const activities = [];
+      
+      // Add user registrations
+      adminData.users.forEach(user => {
+        if (user.joinDate) {
+          activities.push({
+            type: 'login',
+            title: 'New user registered',
+            description: `${user.firstName} ${user.lastName} joined`,
+            time: new Date(user.joinDate),
+            icon: 'fa-user-plus'
+          });
+        }
+      });
+      
+      // Add recent trades
+      adminData.trades.slice(0, 5).forEach(trade => {
+        activities.push({
+          type: 'trade',
+          title: 'Trade executed',
+          description: `${trade.symbol} ${trade.type} ${formatCurrency(trade.amount)}`,
+          time: new Date(trade.openTime),
+          icon: 'fa-chart-line'
+        });
+      });
+      
+      // Sort by time (most recent first)
+      activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+      
+      const activityList = document.getElementById('recentActivity');
+      if (activities.length === 0) {
+        activityList.innerHTML = '<li class="empty-state"><i class="fas fa-clock"></i><h3>No Recent Activity</h3><p>No recent activities to show</p></li>';
+        return;
+      }
+      
+      activityList.innerHTML = activities.slice(0, 8).map(activity => `
+        <li class="activity-item">
+          <div class="activity-icon ${activity.type}">
+            <i class="fas ${activity.icon}"></i>
+          </div>
+          <div class="activity-info">
+            <h5>${activity.title}</h5>
+            <small>${activity.description} • ${formatTimeAgo(activity.time)}</small>
+          </div>
+        </li>
+      `).join('');
+    }
+    
+    // Navigation functions
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('[id$="Section"]').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      // Show selected section
+      document.getElementById(section + 'Section').style.display = 'block';
+      
+      // Update active nav link
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[onclick="showSection('${section}')"]`).classList.add('active');
+      
+      // Update page title
+      const titles = {
+        dashboard: 'Admin Dashboard',
+        users: 'User Management',
+        trades: 'Trade Management',
+        financial: 'Financial Overview'
+      };
+      document.getElementById('pageTitle').textContent = titles[section] || 'Admin Dashboard';
+      
+      currentSection = section;
+    }
+    
+    // Refresh data
+    async function refreshData() {
+      const refreshBtn = document.querySelector('.refresh-btn');
+      const icon = refreshBtn.querySelector('i');
+      
+      icon.classList.add('fa-spin');
+      refreshBtn.disabled = true;
+      
+      try {
+        await loadAdminData();
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      } finally {
+        icon.classList.remove('fa-spin');
+        refreshBtn.disabled = false;
+      }
+    }
+    
+    // Utility functions
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(amount || 0);
+    }
+    
+    function formatTimeAgo(date) {
+      const now = new Date();
+      const diffInMinutes = Math.floor((now - new Date(date)) / (1000 * 60));
+      
+      if (diffInMinutes < 1) return 'Just now';
+      if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+      if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+      return `${Math.floor(diffInMinutes / 1440)}d ago`;
+    }
+    
+    function getStatusColor(status) {
+      const colors = {
+        pending: 'var(--warning)',
+        completed: 'var(--success)',
+        failed: 'var(--danger)',
+        cancelled: 'var(--danger)'
+      };
+      return colors[status] || 'var(--light)';
+    }
+  </script>
+</body>
+</html>

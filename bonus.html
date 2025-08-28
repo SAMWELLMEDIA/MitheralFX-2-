@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MitheralFX - My Bonuses</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1d1e5a;
+      --secondary: #2a2b75;
+      --accent: #ffcc00;
+      --accent-hover: #ffd633;
+      --text: #ffffff;
+      --text-secondary: #b8b9d6;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1d1e5a 0%, #0a0b2e 100%);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo i {
+      color: var(--accent);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .user-info {
+      text-align: right;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .user-tier {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stats-card {
+      background: rgba(42, 43, 117, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stats-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .stat-value {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 3rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .filter-sort {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .filter-sort select {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-sort select:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      background: rgba(42, 43, 117, 0.5);
+      padding: 0.5rem;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: var(--primary);
+      box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+    }
+
+    .bonus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .bonus-card {
+      background: rgba(42, 43, 117, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bonus-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--warning));
+    }
+
+    .bonus-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .bonus-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .bonus-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .bonus-type {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .type-deposit {
+      background: rgba(76, 175, 80, 0.2);
+      color: var(--success);
+    }
+
+    .type-referral {
+      background: rgba(33, 150, 243, 0.2);
+      color: #2196f3;
+    }
+
+    .type-trading {
+      background: rgba(156, 39, 176, 0.2);
+      color: #9c27b0;
+    }
+
+    .type-loyalty {
+      background: rgba(255, 152, 0, 0.2);
+      color: var(--warning);
+    }
+
+    .bonus-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .bonus-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .bonus-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .bonus-date {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .date-label {
+      color: var(--text-secondary);
+    }
+
+    .date-value {
+      font-weight: 500;
+    }
+
+    .bonus-expiry {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .expiry-countdown {
+      font-weight: 600;
+      color: var(--warning);
+    }
+
+    .bonus-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .claim-btn {
+      flex: 1;
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .claim-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .claim-btn:disabled {
+      background: var(--secondary);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .details-btn {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .details-btn:hover {
+      background: rgba(255, 204, 0, 0.1);
+    }
+
+    .claimed-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--success);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .page-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .page-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .page-btn.active {
+      background: var(--accent);
+      color: var(--primary);
+      border-color: var(--accent);
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--primary);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      font-size: 1rem;
+      animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s forwards;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      to {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: var(--secondary);
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .modal-section p {
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .terms-list {
+      list-style-type: none;
+    }
+
+    .terms-list li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .terms-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .empty-state p {
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .bonus-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>MitheralFX</span>
+      </div>
+      <div class="user-profile">
+        <div class="user-info">
+          <div class="user-name">Alex Johnson</div>
+          <div class="user-tier">Gold Trader</div>
+        </div>
+        <div class="user-avatar">AJ</div>
+      </div>
+    </header>
+
+    <h1><i class="fa-solid fa-gift"></i> My Bonuses</h1>
+
+    <div class="dashboard">
+      <div class="stats-card">
+        <h2>Bonus Statistics</h2>
+        <div class="stat-item">
+          <span class="stat-label">Total Bonuses</span>
+          <span class="stat-value" id="totalBonuses">10</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Active Bonuses</span>
+          <span class="stat-value" id="activeBonuses">7</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Claimed Bonuses</span>
+          <span class="stat-value" id="claimedBonuses">3</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total Value</span>
+          <span class="stat-value" id="totalValue">$765</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search bonuses...">
+        </div>
+        <div class="filter-sort">
+          <select id="typeFilter">
+            <option value="all">All Types</option>
+            <option value="deposit">Deposit Bonus</option>
+            <option value="referral">Referral Bonus</option>
+            <option value="trading">Trading Bonus</option>
+            <option value="loyalty">Loyalty Bonus</option>
+          </select>
+          <select id="sortBy">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="amount-high">Highest Amount</option>
+            <option value="amount-low">Lowest Amount</option>
+            <option value="expiring-soon">Expiring Soon</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button id="tabActive" class="tab-btn active" onclick="switchTab('active')">
+        <i class="fas fa-star"></i> Active Bonuses
+      </button>
+      <button id="tabHistory" class="tab-btn" onclick="switchTab('history')">
+        <i class="fas fa-history"></i> Claim History
+      </button>
+    </div>
+
+    <div id="bonusContainer" class="bonus-grid"></div>
+
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="bonusModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Bonus Details</h2>
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Modal content will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced bonus data with more properties
+    const bonuses = [
+      { 
+        id: 1, 
+        title: "Deposit Match Bonus", 
+        amount: "$100", 
+        claimed: false, 
+        issued: "2025-06-20", 
+        expires: "2025-07-05", 
+        description: "Get 40% bonus on your deposit!",
+        type: "deposit",
+        terms: [
+          "Minimum deposit: $250",
+          "Wagering requirement: 30x",
+          "Valid for 15 days after claiming",
+          "Maximum bonus amount: $100"
+        ]
+      },
+      { 
+        id: 2, 
+        title: "Referral Bonus", 
+        amount: "5% of initial deposit", 
+        claimed: true, 
+        issued: "2025-06-10", 
+        expires: "2025-06-30", 
+        description: "Thanks for referring a friend!",
+        type: "referral",
+        terms: [
+          "Referred friend must deposit minimum $200",
+          "Bonus credited after friend's first trade",
+          "No wagering requirements",
+          "Unlimited referrals"
+        ]
+      },
+      { 
+        id: 3, 
+        title: "Risk-Free Trade", 
+        amount: "1 trade", 
+        claimed: false, 
+        issued: "2025-06-25", 
+        expires: "2025-07-10", 
+        description: "Trade without the risk of loss.",
+        type: "trading",
+        terms: [
+          "Maximum trade value: $100",
+          "Loss refunded up to $100",
+          "Valid for any instrument",
+          "Refund credited as bonus balance"
+        ]
+      },
+      { 
+        id: 4, 
+        title: "Welcome Bonus", 
+        amount: "$20", 
+        claimed: false, 
+        issued: "2025-06-26", 
+        expires: "2025-07-15", 
+        description: "Kickstart your trading with a welcome bonus.",
+        type: "deposit",
+        terms: [
+          "No deposit required",
+          "Wagering requirement: 50x",
+          "Valid for 30 days",
+          "Maximum withdrawal: $100"
+        ]
+      },
+      { 
+        id: 5, 
+        title: "Trading Volume Bonus", 
+        amount: "$150", 
+        claimed: false, 
+        issued: "2025-06-01", 
+        expires: "2025-07-01", 
+        description: "You've reached a new trading volume milestone!",
+        type: "trading",
+        terms: [
+          "Trading volume: $50,000+",
+          "No wagering requirements",
+          "Credited instantly",
+          "Can be withdrawn anytime"
+        ]
+      },
+      { 
+        id: 6, 
+        title: "Loyalty Bonus", 
+        amount: "$80", 
+        claimed: true, 
+        issued: "2025-06-05", 
+        expires: "2025-06-25", 
+        description: "Thank you for being a loyal trader!",
+        type: "loyalty",
+        terms: [
+          "Account tier: Gold",
+          "No wagering requirements",
+          "Credited monthly",
+          "Based on previous month's activity"
+        ]
+      },
+      { 
+        id: 7, 
+        title: "Festive Promo Bonus", 
+        amount: "$200", 
+        claimed: false, 
+        issued: "2025-06-24", 
+        expires: "2025-07-07", 
+        description: "Celebrate the season with this special bonus!",
+        type: "deposit",
+        terms: [
+          "Minimum deposit: $500",
+          "Wagering requirement: 25x",
+          "Valid for 20 days",
+          "Maximum bonus amount: $200"
+        ]
+      },
+      { 
+        id: 8, 
+        title: "Loss Recovery Bonus", 
+        amount: "$60", 
+        claimed: false, 
+        issued: "2025-06-20", 
+        expires: "2025-07-03", 
+        description: "Recover part of your losses and trade again.",
+        type: "trading",
+        terms: [
+          "Minimum loss: $100",
+          "Bonus: 30% of losses",
+          "Wagering requirement: 40x",
+          "Valid for 15 days"
+        ]
+      },
+      { 
+        id: 9, 
+        title: "Surprise Bonus", 
+        amount: "$40", 
+        claimed: false, 
+        issued: "2025-06-22", 
+        expires: "2025-07-04", 
+        description: "You've received a surprise reward!",
+        type: "loyalty",
+        terms: [
+          "No deposit required",
+          "Wagering requirement: 35x",
+          "Valid for 10 days",
+          "Maximum withdrawal: $200"
+        ]
+      },
+      { 
+        id: 10, 
+        title: "Cashback Bonus", 
+        amount: "$10", 
+        claimed: true, 
+        issued: "2025-06-15", 
+        expires: "2025-06-30", 
+        description: "Cashback for your recent trades.",
+        type: "trading",
+        terms: [
+          "Based on trading volume",
+          "No wagering requirements",
+          "Credited weekly",
+          "Minimum volume: $1,000"
+        ]
+      }
+    ];
+
+    // Global variables
+    let currentTab = "active";
+    let filteredBonuses = [...bonuses];
+    let currentPage = 1;
+    const itemsPerPage = 6;
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load data from localStorage if available
+      const savedBonuses = localStorage.getItem('mitheralBonuses');
+      if (savedBonuses) {
+        const parsed = JSON.parse(savedBonuses);
+        // Update claimed status
+        bonuses.forEach(bonus => {
+          const saved = parsed.find(b => b.id === bonus.id);
+          if (saved) {
+            bonus.claimed = saved.claimed;
+          }
+        });
+      }
+      
+      // Set up event listeners
+      document.getElementById('searchInput').addEventListener('input', filterBonuses);
+      document.getElementById('typeFilter').addEventListener('change', filterBonuses);
+      document.getElementById('sortBy').addEventListener('change', sortBonuses);
+      
+      // Initial render
+      updateStats();
+      filterBonuses();
+    });
+
+    // Update statistics
+    function updateStats() {
+      const total = bonuses.length;
+      const claimed = bonuses.filter(b => b.claimed).length;
+      const active = total - claimed;
+      
+      // Calculate total value (simplified for demo)
+      const totalValue = bonuses.reduce((sum, bonus) => {
+        const amount = parseFloat(bonus.amount.replace(/[^0-9.]/g, '')) || 0;
+        return sum + amount;
+      }, 0);
+      
+      document.getElementById('totalBonuses').textContent = total;
+      document.getElementById('activeBonuses').textContent = active;
+      document.getElementById('claimedBonuses').textContent = claimed;
+      document.getElementById('totalValue').textContent = `$${totalValue}`;
+    }
+
+    // Switch between tabs
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById("tabActive").classList.remove("active");
+      document.getElementById("tabHistory").classList.remove("active");
+      document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add("active");
+      currentPage = 1;
+      filterBonuses();
+    }
+
+    // Filter bonuses based on search and filters
+    function filterBonuses() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const typeFilter = document.getElementById('typeFilter').value;
+      
+      filteredBonuses = bonuses.filter(bonus => {
+        // Filter by tab
+        if (currentTab === "active" && bonus.claimed) return false;
+        if (currentTab === "history" && !bonus.claimed) return false;
+        
+        // Filter by search term
+        if (searchTerm && !bonus.title.toLowerCase().includes(searchTerm) && 
+            !bonus.description.toLowerCase().includes(searchTerm)) {
+          return false;
+        }
+        
+        // Filter by type
+        if (typeFilter !== "all" && bonus.type !== typeFilter) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      sortBonuses();
+    }
+
+    // Sort bonuses based on selected criteria
+    function sortBonuses() {
+      const sortBy = document.getElementById('sortBy').value;
+      
+      filteredBonuses.sort((a, b) => {
+        switch(sortBy) {
+          case "newest":
+            return new Date(b.issued) - new Date(a.issued);
+          case "oldest":
+            return new Date(a.issued) - new Date(b.issued);
+          case "amount-high":
+            const amountA = parseFloat(a.amount.replace(/[^0-9.]/g, '')) || 0;
+            const amountB = parseFloat(b.amount.replace(/[^0-9.]/g, '')) || 0;
+            return amountB - amountA;
+          case "amount-low":
+            const amountA2 = parseFloat(a.amount.replace(/[^0-9.]/g, '')) || 0;
+            const amountB2 = parseFloat(b.amount.replace(/[^0-9.]/g, '')) || 0;
+            return amountA2 - amountB2;
+          case "expiring-soon":
+            return new Date(a.expires) - new Date(b.expires);
+          default:
+            return 0;
+        }
+      });
+      
+      renderBonuses();
+    }
+
+    // Render bonuses with pagination
+    function renderBonuses() {
+      const container = document.getElementById("bonusContainer");
+      container.innerHTML = "";
+      
+      // Calculate pagination
+      const totalPages = Math.ceil(filteredBonuses.length / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedBonuses = filteredBonuses.slice(startIndex, endIndex);
+      
+      if (paginatedBonuses.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-gift"></i>
+            <h3>No bonuses found</h3>
+            <p>There are no ${currentTab === "active" ? "active" : "claimed"} bonuses matching your criteria.</p>
+          </div>
+        `;
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+      
+      // Render bonus cards
+      paginatedBonuses.forEach(bonus => {
+        const card = document.createElement("div");
+        card.className = "bonus-card";
+        
+        // Calculate days remaining
+        const today = new Date();
+        const expiryDate = new Date(bonus.expires);
+        const diffTime = expiryDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        card.innerHTML = `
+          ${bonus.claimed ? '<div class="claimed-badge"><i class="fas fa-check-circle"></i> Claimed</div>' : ''}
+          <div class="bonus-header">
+            <div>
+              <div class="bonus-type type-${bonus.type}">${bonus.type.charAt(0).toUpperCase() + bonus.type.slice(1)}</div>
+              <h3 class="bonus-title">${bonus.title}</h3>
+            </div>
+          </div>
+          <div class="bonus-amount">${bonus.amount}</div>
+          <p class="bonus-description">${bonus.description}</p>
+          <div class="bonus-meta">
+            <div class="bonus-date">
+              <span class="date-label">Issued</span>
+              <span class="date-value">${formatDate(bonus.issued)}</span>
+            </div>
+            <div class="bonus-expiry">
+              <i class="fas fa-clock"></i>
+              <span>Expires in <span class="expiry-countdown">${diffDays} days</span></span>
+            </div>
+          </div>
+          <div class="bonus-actions">
+            ${!bonus.claimed 
+              ? `<button class="claim-btn" onclick="claimBonus(${bonus.id})"><i class="fas fa-gift"></i> Claim Bonus</button>` 
+              : `<button class="claim-btn" disabled><i class="fas fa-check"></i> Claimed</button>`}
+            <button class="details-btn" onclick="showDetails(${bonus.id})">
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      
+      // Render pagination
+      renderPagination(totalPages);
+    }
+
+    // Render pagination controls
+    function renderPagination(totalPages) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+      
+      if (totalPages <= 1) return;
+      
+      // Previous button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'page-btn';
+      prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderBonuses();
+        }
+      };
+      pagination.appendChild(prevBtn);
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          renderBonuses();
+        };
+        pagination.appendChild(pageBtn);
+      }
+      
+      // Next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'page-btn';
+      nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderBonuses();
+        }
+      };
+      pagination.appendChild(nextBtn);
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
+    // Claim a bonus
+    function claimBonus(id) {
+      const index = bonuses.findIndex(b => b.id === id);
+      if (index > -1 && !bonuses[index].claimed) {
+        bonuses[index].claimed = true;
+        
+        // Save to localStorage
+        localStorage.setItem('mitheralBonuses', JSON.stringify(bonuses));
+        
+        showToast(`${bonuses[index].title} has been claimed!`);
+        updateStats();
+        filterBonuses();
+      }
+    }
+
+    // Show bonus details modal
+    function showDetails(id) {
+      const bonus = bonuses.find(b => b.id === id);
+      if (!bonus) return;
+      
+      document.getElementById('modalTitle').textContent = bonus.title;
+      
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = `
+        <div class="modal-section">
+          <h3>Bonus Information</h3>
+          <p><strong>Amount:</strong> ${bonus.amount}</p>
+          <p><strong>Type:</strong> ${bonus.type.charAt(0).toUpperCase() + bonus.type.slice(1)}</p>
+          <p><strong>Issued:</strong> ${formatDate(bonus.issued)}</p>
+          <p><strong>Expires:</strong> ${formatDate(bonus.expires)}</p>
+          <p><strong>Status:</strong> ${bonus.claimed ? 'Claimed' : 'Active'}</p>
+        </div>
+        <div class="modal-section">
+          <h3>Description</h3>
+          <p>${bonus.description}</p>
+        </div>
+        <div class="modal-section">
+          <h3>Terms & Conditions</h3>
+          <ul class="terms-list">
+            ${bonus.terms.map(term => `<li>${term}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+      
+      document.getElementById('bonusModal').style.display = 'flex';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('bonusModal').style.display = 'none';
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.style.display = 'block';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('bonusModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>

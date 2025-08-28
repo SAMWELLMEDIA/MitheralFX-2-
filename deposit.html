@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MitheralFX Wallet - Deposit Funds</title>
+  
+  <!-- External Libraries -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    /* CSS Variables (same as main dashboard) */
+    :root {
+      --bg-primary: #0a0b1e;
+      --bg-secondary: #151933;
+      --bg-card: #1a1f3a;
+      --bg-hover: #252b4a;
+      --bg-sidebar: #0f1329;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a9c9;
+      --text-muted: #6b7280;
+      --primary: #ffcc00;
+      --primary-dark: #e6b800;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --border: #2a3050;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient: linear-gradient(135deg, #1a1f3a, #252b4a);
+    }
+    
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 204, 0, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 20%);
+    }
+    
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar styles */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: fixed;
+      height: 100vh;
+      z-index: 1000;
+      overflow-y: auto;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .sidebar.collapsed {
+      width: 70px;
+    }
+    
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .logo i {
+      font-size: 1.5rem;
+    }
+    
+    .sidebar.collapsed .logo span {
+      display: none;
+    }
+    
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    .sidebar-toggle:hover {
+      color: var(--primary);
+    }
+    
+    .nav-menu {
+      flex: 1;
+      padding: 1rem 0;
+    }
+    
+    .nav-item {
+      position: relative;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    .nav-link.active {
+      background: rgba(255, 204, 0, 0.1);
+      color: var(--primary);
+      border-right: 3px solid var(--primary);
+    }
+    
+    .nav-link i {
+      font-size: 1.25rem;
+      width: 24px;
+      text-align: center;
+    }
+    
+    .sidebar.collapsed .nav-link span {
+      display: none;
+    }
+    
+    .sidebar.collapsed .nav-link {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+    
+    /* Submenu styles */
+    .nav-submenu {
+      display: none;
+      background: var(--bg-sidebar);
+      padding-left: 1rem;
+    }
+    
+    .nav-submenu.show {
+      display: block;
+    }
+    
+    .nav-submenu .nav-link {
+      padding-left: 2.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .nav-submenu .nav-link i {
+      font-size: 1rem;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar.collapsed + .main-content {
+      margin-left: 70px;
+    }
+    
+    /* Top Bar */
+    .topbar {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background-color: rgba(21, 25, 51, 0.8);
+    }
+    
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    .user-menu {
+      position: relative;
+    }
+    
+    .user-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .user-btn:hover {
+      background: var(--bg-hover);
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--bg-primary);
+    }
+    
+    /* User dropdown menu */
+    .user-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      min-width: 200px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    
+    .user-menu-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .user-menu-dropdown a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .user-menu-dropdown a:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 1.5rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    /* Balance Card */
+    .balance-card {
+      background: var(--gradient);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    
+    .balance-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .balance-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary), #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .balance-info {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .balance-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .balance-info-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .balance-info-value {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    /* Payment Method Cards */
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .payment-method-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .payment-method-card:hover {
+      background: var(--bg-hover);
+      border-color: var(--primary);
+      transform: translateY(-5px);
+    }
+    
+    .payment-method-card.selected {
+      background: rgba(255, 204, 0, 0.1);
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+    }
+    
+    .payment-method-icon {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+    
+    .payment-method-name {
+      font-weight: 500;
+    }
+    
+    .payment-method-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    
+    /* Amount Selector */
+    .amount-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .amount-preset {
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.875rem;
+    }
+    
+    .amount-preset:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    .amount-preset.selected {
+      background: var(--primary);
+      color: var(--bg-primary);
+      border-color: var(--primary);
+    }
+    
+    /* Fee Info */
+    .fee-info {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .fee-row:last-child {
+      margin-bottom: 0;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Bonus Info */
+    .bonus-info {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .bonus-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--success);
+      font-weight: 500;
+    }
+    
+    .bonus-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .bonus-amount {
+      font-weight: 600;
+      color: var(--success);
+    }
+    
+    /* Button Styles */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg-primary);
+      width: 100%;
+      justify-content: center;
+      font-size: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .table th {
+      text-align: left;
+      padding: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    
+    .table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    
+    .table tbody tr:hover {
+      background: var(--bg-hover);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+    
+    .bg-success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .bg-warning {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .bg-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .bg-info {
+      background: var(--info);
+      color: white;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Method Details */
+    .method-details {
+      display: none;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .method-details.show {
+      display: block;
+    }
+    
+    .method-details .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .method-details .form-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Bank Details */
+    .bank-details {
+      display: none;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .bank-details.show {
+      display: block;
+    }
+    
+    .bank-details .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .bank-details .form-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Wallet Address Display */
+    .wallet-address-container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .wallet-address-display {
+      flex: 1;
+      padding: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    
+    .copy-button {
+      padding: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .copy-button:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    .copy-button.copied {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+    
+    /* Network Info */
+    .network-info {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+    }
+    
+    .network-info-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .network-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .network-detail {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+    
+    .network-detail-name {
+      color: var(--text-secondary);
+    }
+    
+    .network-detail-value {
+      font-weight: 500;
+    }
+    
+    /* Cryptocurrency Search */
+    .crypto-search {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    .crypto-search input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+    
+    .crypto-search input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
+    }
+    
+    .crypto-search i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+    
+    .crypto-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-card);
+    }
+    
+    .crypto-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .crypto-item:last-child {
+      border-bottom: none;
+    }
+    
+    .crypto-item:hover {
+      background: var(--bg-hover);
+    }
+    
+    .crypto-item.selected {
+      background: rgba(255, 204, 0, 0.1);
+      border-left: 3px solid var(--primary);
+    }
+    
+    .crypto-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+    
+    .crypto-info {
+      flex: 1;
+    }
+    
+    .crypto-name {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .crypto-fullname {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+    }
+    
+    .page-btn {
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .page-btn:hover {
+      background: var(--bg-hover);
+      color: var(--primary);
+    }
+    
+    .page-btn.active {
+      background: var(--primary);
+      color: var(--bg-primary);
+      border-color: var(--primary);
+    }
+    
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .modal-close:hover {
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    
+    .deposit-details {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .detail-row:last-child {
+      margin-bottom: 0;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 10px 25px var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 300px;
+      animation: slideIn 0.3s ease;
+    }
+    
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+    
+    .toast.error {
+      border-left: 4px solid var(--danger);
+    }
+    
+    .toast.warning {
+      border-left: 4px solid var(--warning);
+    }
+    
+    .toast.info {
+      border-left: 4px solid var(--info);
+    }
+    
+    .toast-icon {
+      font-size: 1.25rem;
+    }
+    
+    .toast.success .toast-icon {
+      color: var(--success);
+    }
+    
+    .toast.error .toast-icon {
+      color: var(--danger);
+    }
+    
+    .toast.warning .toast-icon {
+      color: var(--warning);
+    }
+    
+    .toast.info .toast-icon {
+      color: var(--info);
+    }
+    
+    .toast-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    .toast-close:hover {
+      color: var(--text-primary);
+    }
+    
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 11, 30, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    
+    .loading-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Progress Bar */
+    .progress {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    /* Light Theme Styles */
+    body.light-theme {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-hover: #f1f5f9;
+      --bg-sidebar: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+    body.light-theme .sidebar {
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    }
+    body.light-theme .topbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    body.light-theme .card {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    body.light-theme .form-control {
+      background: #ffffff;
+    }
+    body.light-theme .table th {
+      border-bottom-color: #e2e8f0;
+    }
+    body.light-theme .table td {
+      border-bottom-color: #f1f5f9;
+    }
+    
+    /* Mobile Navigation */
+    .mobile-menu-btn {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: flex;
+        margin-right: 1rem;
+      }
+
+      .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 2000;
+        position: fixed;
+        height: 100vh;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .sidebar-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .page-title {
+        font-size: 2.2rem;
+      }
+      
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .filters {
+        flex-direction: column;
+      }
+      
+      .balance-info {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .payment-methods {
+        grid-template-columns: 1fr;
+      }
+      
+      .amount-selector {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fas fa-chart-line"></i>
+          <span>MitheralFX</span>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      
+      <nav class="nav-menu">
+        <div class="nav-item">
+          <a href="trading-dashboard.html" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="toggleSubmenu(this)">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Trading</span>
+            <i class="fas fa-chevron-down ms-auto"></i>
+          </a>
+          <div class="nav-submenu">
+            <a href="charts.html" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Charts</span>
+            </a>
+            <a href="Trade-History.html" class="nav-link">
+              <i class="fas fa-history"></i>
+              <span>Trade History</span>
+            </a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="wallet.html" class="nav-link active">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="toggleSubmenu(this)">
+            <i class="fas fa-chart-pie"></i>
+            <span>Portfolio</span>
+            <i class="fas fa-chevron-down ms-auto"></i>
+          </a>
+          <div class="nav-submenu">
+            <a href="assets.html" class="nav-link">
+              <i class="fas fa-coins"></i>
+              <span>Assets</span>
+            </a>
+            <a href="allocation.html" class="nav-link">
+              <i class="fas fa-percentage"></i>
+              <span>Allocation</span>
+            </a>
+          </div>
+        </div>
+        
+        <div class="nav-item">
+          <a href="market-news.html" class="nav-link">
+            <i class="fas fa-newspaper"></i>
+            <span>Market News</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="calendar.html" class="nav-link">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Economic Calendar</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="help.html" class="nav-link">
+            <i class="fas fa-question-circle"></i>
+            <span>Help & Support</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Deposit Funds</h1>
+        </div>
+        
+        <div class="topbar-right">
+          <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+          </button>
+          
+          <div class="user-menu">
+            <div class="user-btn" onclick="toggleUserMenu()">
+              <div class="user-avatar">S</div>
+              <span>SAMWELL MEDIA</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-menu-dropdown" id="userDropdown">
+              <a href="profile.html">Profile</a>
+              <a href="settings.html">Settings</a>
+              <a href="logout.html">Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <div class="content">
+        <div class="container">
+          <div class="balance-card">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount" id="currentBalance">$0.00</div>
+            
+            <div class="balance-info">
+              <div class="balance-info-item">
+                <span class="balance-info-label">Total Deposited</span>
+                <span class="balance-info-value" id="totalDeposited">$0.00</span>
+              </div>
+              
+              <div class="balance-info-item">
+                <span class="balance-info-label">Total Bonus</span>
+                <span class="balance-info-value" id="totalBonus">$0.00</span>
+              </div>
+              
+              <div class="balance-info-item">
+                <span class="balance-info-label">Deposit Count</span>
+                <span class="balance-info-value" id="depositCount">0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Make a Deposit</h2>
+            </div>
+            
+            <form id="depositForm">
+              <div class="form-group">
+                <label class="form-label">Select Payment Method</label>
+                <div class="payment-methods">
+                  <div class="payment-method-card" onclick="selectPaymentMethod('bank')">
+                    <i class="fas fa-university payment-method-icon"></i>
+                    <span class="payment-method-name">Bank Transfer</span>
+                    <span class="payment-method-desc">1-3 business days</span>
+                  </div>
+                  
+                  <div class="payment-method-card" onclick="selectPaymentMethod('crypto')">
+                    <i class="fab fa-bitcoin payment-method-icon"></i>
+                    <span class="payment-method-name">Cryptocurrency</span>
+                    <span class="payment-method-desc">Instant deposit with 100+ cryptocurrencies</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Deposit Amount (USD)</label>
+                <input type="number" class="form-control" id="depositAmount" placeholder="Enter amount" min="10" step="0.01" />
+                
+                <div class="amount-selector">
+                  <div class="amount-preset" onclick="setAmount(100)">$100</div>
+                  <div class="amount-preset" onclick="setAmount(250)">$250</div>
+                  <div class="amount-preset" onclick="setAmount(500)">$500</div>
+                  <div class="amount-preset" onclick="setAmount(1000)">$1,000</div>
+                  <div class="amount-preset" onclick="setAmount(5000)">$5,000</div>
+                </div>
+              </div>
+              
+              <!-- Bank Details -->
+              <div id="bankDetails" class="bank-details">
+                <div class="form-group">
+                  <label class="form-label">Bank Name</label>
+                  <input type="text" class="form-control" id="bankName" placeholder="Enter bank name" />
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Account Name</label>
+                  <input type="text" class="form-control" id="accountName" placeholder="Enter account name" />
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Account Number</label>
+                  <input type="text" class="form-control" id="accountNumber" placeholder="Enter account number" />
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Routing Number</label>
+                  <input type="text" class="form-control" id="routingNumber" placeholder="Enter routing number" />
+                </div>
+              </div>
+              
+              <!-- Crypto Details -->
+              <div id="cryptoDetails" class="method-details">
+                <div class="form-group">
+                  <label class="form-label">Search Cryptocurrency</label>
+                  <div class="crypto-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="cryptoSearch" placeholder="Search for cryptocurrency..." oninput="filterCryptos()">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Select Cryptocurrency</label>
+                  <div class="crypto-list" id="cryptoList">
+                    <!-- Crypto items will be populated here -->
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Wallet Address</label>
+                  <div class="wallet-address-container">
+                    <div class="wallet-address-display" id="walletAddressDisplay">Select a cryptocurrency to generate address</div>
+                    <button type="button" class="copy-button" id="copyAddressBtn" onclick="copyWalletAddress()" style="display: none;">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <div class="network-info" id="networkInfo" style="display: none;">
+                  <div class="network-info-header">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Network Information</span>
+                  </div>
+                  <div class="network-details">
+                    <div class="network-detail">
+                      <span class="network-detail-name">Network:</span>
+                      <span class="network-detail-value" id="networkName">-</span>
+                    </div>
+                    <div class="network-detail">
+                      <span class="network-detail-name">Confirmation Time:</span>
+                      <span class="network-detail-value" id="confirmationTime">-</span>
+                    </div>
+                    <div class="network-detail">
+                      <span class="network-detail-name">Minimum Deposit:</span>
+                      <span class="network-detail-value" id="minimumDeposit">-</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Transaction ID (Optional)</label>
+                  <input type="text" class="form-control" id="transactionId" placeholder="Enter transaction ID after sending" />
+                </div>
+              </div>
+              
+              <!-- Bonus Information -->
+              <div class="bonus-info">
+                <div class="bonus-header">
+                  <i class="fas fa-gift"></i>
+                  <span>Deposit Bonus</span>
+                </div>
+                
+                <div class="bonus-details">
+                  <span>Get up to 100% bonus on your first deposit</span>
+                  <span class="bonus-amount" id="bonusAmount">$0.00</span>
+                </div>
+              </div>
+              
+              <!-- Fee Information -->
+              <div class="fee-info">
+                <div class="fee-row">
+                  <span>Deposit Amount:</span>
+                  <span id="feeAmount">$0.00</span>
+                </div>
+                <div class="fee-row">
+                  <span>Processing Fee:</span>
+                  <span id="processingFee">$0.00</span>
+                </div>
+                <div class="fee-row">
+                  <span>Bonus Amount:</span>
+                  <span id="bonusFee">$0.00</span>
+                </div>
+                <div class="fee-row">
+                  <span>Total Credit:</span>
+                  <span id="totalCredit">$0.00</span>
+                </div>
+              </div>
+              
+              <button type="button" class="btn btn-primary" onclick="confirmDeposit()">
+                <i class="fas fa-plus-circle"></i> Deposit Funds
+              </button>
+            </form>
+          </div>
+          
+          <!-- Deposit History -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Deposit History</h2>
+            </div>
+            
+            <div class="filters">
+              <div class="filter-group">
+                <select class="form-control" id="statusFilter" onchange="filterDeposits()">
+                  <option value="">All Statuses</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Failed">Failed</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <select class="form-control" id="methodFilter" onchange="filterDeposits()">
+                  <option value="">All Methods</option>
+                  <option value="bank">Bank Transfer</option>
+                  <option value="crypto">Cryptocurrency</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search by ID or amount" oninput="filterDeposits()">
+              </div>
+            </div>
+            
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                    <th>Bonus</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="depositHistory">
+                  <!-- Deposit history will be populated here -->
+                </tbody>
+              </table>
+              
+              <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-history"></i>
+                <h3>No Deposit History</h3>
+                <p>You haven't made any deposits yet.</p>
+              </div>
+            </div>
+            
+            <div class="pagination" id="pagination">
+              <!-- Pagination will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+  
+  <!-- Confirmation Modal -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Deposit</h2>
+        <button class="modal-close" onclick="closeConfirmModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <p>Are you sure you want to proceed with this deposit?</p>
+        
+        <div class="deposit-details">
+          <div class="detail-row">
+            <span>Deposit Amount:</span>
+            <span id="confirmAmount">$0.00</span>
+          </div>
+          <div class="detail-row">
+            <span>Payment Method:</span>
+            <span id="confirmMethod"></span>
+          </div>
+          <div class="detail-row">
+            <span>Processing Fee:</span>
+            <span id="confirmFee">$0.00</span>
+          </div>
+          <div class="detail-row">
+            <span>Bonus Amount:</span>
+            <span id="confirmBonus">$0.00</span>
+          </div>
+          <div class="detail-row">
+            <span>Total Credit:</span>
+            <span id="confirmTotal">$0.00</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitDeposit()">
+          <i class="fas fa-check"></i> Confirm Deposit
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Details Modal -->
+  <div class="modal" id="detailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Deposit Details</h2>
+        <button class="modal-close" onclick="closeDetailsModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body" id="detailsContent">
+        <!-- Details will be populated here -->
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+  
+  <script>
+    // Global variables
+    let balance = {
+      demo: 10000,
+      live: 0
+    };
+    
+    // Deposit fees
+    const depositFees = {
+      bank: 0.01,   // 1%
+      crypto: 0.001 // 0.1%
+    };
+    
+    // Bonus calculation
+    const bonusTiers = [
+      { min: 100, max: 499, bonus: 0.25 },   // 25% bonus
+      { min: 500, max: 999, bonus: 0.5 },    // 50% bonus
+      { min: 1000, max: 4999, bonus: 0.75 }, // 75% bonus
+      { min: 5000, max: Infinity, bonus: 1 }  // 100% bonus
+    ];
+    
+    // Cryptocurrency data
+    const cryptocurrencies = [
+      { id: 'bitcoin', name: 'Bitcoin', fullname: 'Bitcoin', icon: 'fab fa-bitcoin', address: 'bc1q9g8jf6y9mj84d0uvgjxz7zdjume8y6lmld7t5j', network: 'Bitcoin Network', confirmationTime: '10-60 minutes', minimumDeposit: '$100.00' },
+      { id: 'ethereum', name: 'Ethereum', fullname: 'Ethereum', icon: 'fab fa-ethereum', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'Ethereum Network (ERC20)', confirmationTime: '2-15 minutes', minimumDeposit: '$100.00' },
+      { id: 'usdt', name: 'USDT', fullname: 'Tether', icon: 'fas fa-dollar-sign', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'Binance Smart Chain (BEP20)', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'usdc', name: 'USDC', fullname: 'USD Coin', icon: 'fas fa-coins', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'Binance Smart Chain (BEP20)', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'litecoin', name: 'Litecoin', fullname: 'Litecoin', icon: 'fab fa-bitcoin', address: 'ltc1qgrjfds5elwz89h7ezwcc3paxld9pd47trtdg30', network: 'Litecoin Network', confirmationTime: '5-30 minutes', minimumDeposit: '$100.00' },
+      { id: 'ripple', name: 'XRP', fullname: 'Ripple', icon: 'fas fa-water', address: 'rEb8TK3gBgk5auZkwc6sHnwrGVJH8DuaLh', network: 'Ripple Network', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'cardano', name: 'ADA', fullname: 'Cardano', icon: 'fas fa-coins', address: 'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj0vs2qd4a6t0n0u2j4w9kz3', network: 'Cardano Network', confirmationTime: '5-20 minutes', minimumDeposit: '$100.00' },
+      { id: 'polkadot', name: 'DOT', fullname: 'Polkadot', icon: 'fas fa-circle', address: '15oF4uVJwmo4TdGWddVfMxepjCNuQN8gXc', network: 'Polkadot Network', confirmationTime: '2-10 minutes', minimumDeposit: '$100.00' },
+      { id: 'dogecoin', name: 'DOGE', fullname: 'Dogecoin', icon: 'fab fa-bitcoin', address: 'D7Y55Lk6a3sJZ7m7XaQp2AeCQJ5p5X9Y2d', network: 'Dogecoin Network', confirmationTime: '5-30 minutes', minimumDeposit: '$100.00' },
+      { id: 'polygon', name: 'MATIC', fullname: 'Polygon', icon: 'fas fa-shapes', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'Polygon Network', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'chainlink', name: 'LINK', fullname: 'Chainlink', icon: 'fas fa-link', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'Ethereum Network (ERC20)', confirmationTime: '2-15 minutes', minimumDeposit: '$100.00' },
+      { id: 'stellar', name: 'XLM', fullname: 'Stellar', icon: 'fas fa-star', address: 'GD5JD2KZKZDUXJNYFVNG5V3DQDQY5DQY5DQY5DQY5DQY5DQY5DQY5DQ', network: 'Stellar Network', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'vechain', name: 'VET', fullname: 'VeChain', icon: 'fas fa-cube', address: '0x607Fd56f2e32114D9236455dE5ec1935f745E37a', network: 'VeChain Network', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'filecoin', name: 'FIL', fullname: 'Filecoin', icon: 'fas fa-file', address: 'f1v2q3w4r5t6y7u8i9o0p', network: 'Filecoin Network', confirmationTime: '5-30 minutes', minimumDeposit: '$100.00' },
+      { id: 'tron', name: 'TRX', fullname: 'Tron', icon: 'fas fa-bolt', address: 'TLa2f6VPqDgRE67v1736s7bJ8BZsBz5T6y', network: 'Tron Network (TRC20)', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' },
+      { id: 'ethereum-classic', name: 'ETC', fullname: 'Ethereum Classic', icon: 'fab fa-ethereum', address: '0x977800ef6c68006100C211C0352d2430Ed740C78', network: 'Ethereum Classic Network', confirmationTime: '5-20 minutes', minimumDeposit: '$100.00' },
+      { id: 'monero', name: 'XMR', fullname: 'Monero', icon: 'fas fa-coins', address: '44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A', network: 'Monero Network', confirmationTime: '20-60 minutes', minimumDeposit: '$100.00' },
+      { id: 'cosmos', name: 'ATOM', fullname: 'Cosmos', icon: 'fas fa-globe', address: 'cosmos1v2q3w4r5t6y7u8i9o0p', network: 'Cosmos Network', confirmationTime: '5-15 minutes', minimumDeposit: '$100.00' },
+      { id: 'solana', name: 'SOL', fullname: 'Solana', icon: 'fas fa-sun', address: 'So11111111111111111111111111111111111111112', network: 'Solana Network', confirmationTime: '1-5 minutes', minimumDeposit: '$100.00' }
+    ];
+    
+    // Selected payment method and cryptocurrency
+    let selectedMethod = '';
+    let selectedCrypto = null;
+    
+    // Pagination variables
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let filteredDeposits = [];
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load balance from localStorage
+      const savedBalance = localStorage.getItem('account_balance');
+      if (savedBalance) {
+        balance = JSON.parse(savedBalance);
+      }
+      
+      // Load theme preference
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+        document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
+      }
+      
+      // Update balance display
+      updateBalanceDisplay();
+      
+      // Load deposit history
+      loadDepositHistory();
+      
+      // Add event listener for amount input
+      document.getElementById('depositAmount').addEventListener('input', updateFeeDisplay);
+      
+      // Initialize cryptocurrency list
+      initCryptoList();
+      
+      // Format account number input
+      const accountNumberInput = document.getElementById('accountNumber');
+      if (accountNumberInput) {
+        accountNumberInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '');
+        });
+      }
+      
+      // Format routing number input
+      const routingNumberInput = document.getElementById('routingNumber');
+      if (routingNumberInput) {
+        routingNumberInput.addEventListener('input', function(e) {
+          e.target.value = e.target.value.replace(/\D/g, '');
+        });
+      }
+      
+      // Simulate processing of pending deposits
+      processPendingDeposits();
+    });
+    
+    // Initialize cryptocurrency list
+    function initCryptoList() {
+      const cryptoList = document.getElementById('cryptoList');
+      cryptoList.innerHTML = '';
+      
+      // Show top 5 cryptocurrencies by default
+      const topCryptos = cryptocurrencies.slice(0, 5);
+      
+      topCryptos.forEach(crypto => {
+        const cryptoItem = createCryptoItem(crypto);
+        cryptoList.appendChild(cryptoItem);
+      });
+    }
+    
+    // Create cryptocurrency item
+    function createCryptoItem(crypto) {
+      const cryptoItem = document.createElement('div');
+      cryptoItem.className = 'crypto-item';
+      cryptoItem.dataset.id = crypto.id;
+      cryptoItem.onclick = () => selectCrypto(crypto.id);
+      
+      cryptoItem.innerHTML = `
+        <div class="crypto-icon">
+          <i class="${crypto.icon}"></i>
+        </div>
+        <div class="crypto-info">
+          <div class="crypto-name">${crypto.name}</div>
+          <div class="crypto-fullname">${crypto.fullname}</div>
+        </div>
+      `;
+      
+      return cryptoItem;
+    }
+    
+    // Filter cryptocurrencies based on search
+    function filterCryptos() {
+      const searchTerm = document.getElementById('cryptoSearch').value.toLowerCase();
+      const cryptoList = document.getElementById('cryptoList');
+      cryptoList.innerHTML = '';
+      
+      // Filter cryptocurrencies based on search term
+      const filteredCryptos = cryptocurrencies.filter(crypto => 
+        crypto.name.toLowerCase().includes(searchTerm) || 
+        crypto.fullname.toLowerCase().includes(searchTerm)
+      );
+      
+      // Display filtered cryptocurrencies
+      filteredCryptos.forEach(crypto => {
+        const cryptoItem = createCryptoItem(crypto);
+        cryptoList.appendChild(cryptoItem);
+      });
+      
+      // If no results, show message
+      if (filteredCryptos.length === 0) {
+        cryptoList.innerHTML = `
+          <div class="crypto-item">
+            <div class="crypto-info">
+              <div class="crypto-name">No results found</div>
+              <div class="crypto-fullname">Try a different search term</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // Select cryptocurrency
+    function selectCrypto(cryptoId) {
+      // Update selected crypto
+      selectedCrypto = cryptocurrencies.find(c => c.id === cryptoId);
+      
+      // Update UI
+      document.querySelectorAll('.crypto-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      document.querySelector(`.crypto-item[data-id="${cryptoId}"]`).classList.add('selected');
+      
+      // Update wallet address display
+      document.getElementById('walletAddressDisplay').textContent = selectedCrypto.address;
+      document.getElementById('copyAddressBtn').style.display = 'flex';
+      
+      // Update network information
+      document.getElementById('networkName').textContent = selectedCrypto.network;
+      document.getElementById('confirmationTime').textContent = selectedCrypto.confirmationTime;
+      document.getElementById('minimumDeposit').textContent = selectedCrypto.minimumDeposit;
+      
+      // Show network info
+      document.getElementById('networkInfo').style.display = 'block';
+      
+      // Reset copy button state
+      const copyBtn = document.getElementById('copyAddressBtn');
+      copyBtn.classList.remove('copied');
+      copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+    }
+    
+    // Update balance display
+    function updateBalanceDisplay() {
+      document.getElementById('currentBalance').textContent = `$${balance.live.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      
+      // Calculate deposit statistics
+      const history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+      let totalDeposited = 0;
+      let totalBonus = 0;
+      
+      history.forEach(deposit => {
+        if (deposit.status === 'Completed') {
+          totalDeposited += deposit.amount;
+          totalBonus += deposit.bonus;
+        }
+      });
+      
+      document.getElementById('totalDeposited').textContent = `$${totalDeposited.toFixed(2)}`;
+      document.getElementById('totalBonus').textContent = `$${totalBonus.toFixed(2)}`;
+      document.getElementById('depositCount').textContent = history.filter(d => d.status === 'Completed').length;
+    }
+    
+    // Select payment method
+    function selectPaymentMethod(method) {
+      selectedMethod = method;
+      
+      // Update UI
+      document.querySelectorAll('.payment-method-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      
+      // Hide all method details
+      document.getElementById('bankDetails').classList.remove('show');
+      document.getElementById('cryptoDetails').classList.remove('show');
+      
+      // Show selected method details
+      if (method === 'bank') {
+        document.getElementById('bankDetails').classList.add('show');
+      } else if (method === 'crypto') {
+        document.getElementById('cryptoDetails').classList.add('show');
+      }
+      
+      // Update fee display
+      updateFeeDisplay();
+    }
+    
+    // Set amount from preset
+    function setAmount(amount) {
+      document.getElementById('depositAmount').value = amount;
+      
+      // Update UI
+      document.querySelectorAll('.amount-preset').forEach(preset => {
+        preset.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      
+      // Update fee display
+      updateFeeDisplay();
+    }
+    
+    // Update fee display
+    function updateFeeDisplay() {
+      const amount = parseFloat(document.getElementById('depositAmount').value) || 0;
+      
+      let fee = 0;
+      if (selectedMethod && amount > 0) {
+        fee = amount * depositFees[selectedMethod];
+      }
+      
+      // Calculate bonus
+      const bonusTier = bonusTiers.find(tier => amount >= tier.min && amount <= tier.max);
+      const bonus = bonusTier ? amount * bonusTier.bonus : 0;
+      
+      const totalCredit = amount - fee + bonus;
+      
+      // Update display
+      document.getElementById('feeAmount').textContent = `$${amount.toFixed(2)}`;
+      document.getElementById('processingFee').textContent = `$${fee.toFixed(2)}`;
+      document.getElementById('bonusAmount').textContent = `$${bonus.toFixed(2)}`;
+      document.getElementById('bonusFee').textContent = `$${bonus.toFixed(2)}`;
+      document.getElementById('totalCredit').textContent = `$${totalCredit.toFixed(2)}`;
+    }
+    
+    // Copy wallet address to clipboard
+    function copyWalletAddress() {
+      const walletAddress = document.getElementById('walletAddressDisplay').textContent;
+      const copyBtn = document.getElementById('copyAddressBtn');
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(walletAddress).then(function() {
+        // Update button state
+        copyBtn.classList.add('copied');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+        
+        // Show notification
+        showToast('success', 'Wallet address copied to clipboard!');
+        
+        // Reset button after 3 seconds
+        setTimeout(function() {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+        }, 3000);
+      }).catch(function(err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = walletAddress;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Update button state
+        copyBtn.classList.add('copied');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+        
+        // Show notification
+        showToast('success', 'Wallet address copied to clipboard!');
+        
+        // Reset button after 3 seconds
+        setTimeout(function() {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+        }, 3000);
+      });
+    }
+    
+    // Confirm deposit
+    function confirmDeposit() {
+      const amount = parseFloat(document.getElementById('depositAmount').value) || 0;
+      
+      // Validate amount
+      if (isNaN(amount) || amount <= 0) {
+        showToast('error', 'Please enter a valid deposit amount');
+        return;
+      }
+      
+      // Validate minimum amount
+      if (amount < 50) {
+        showToast('error', 'Minimum deposit amount is $50.00');
+        return;
+      }
+      
+      // Validate payment method
+      if (!selectedMethod) {
+        showToast('error', 'Please select a payment method');
+        return;
+      }
+      
+      // Validate method-specific fields
+      if (!validateMethodFields()) {
+        return;
+      }
+      
+      // Calculate fee and bonus
+      const fee = amount * depositFees[selectedMethod];
+      const bonusTier = bonusTiers.find(tier => amount >= tier.min && amount <= tier.max);
+      const bonus = bonusTier ? amount * bonusTier.bonus : 0;
+      const totalCredit = amount - fee + bonus;
+      
+      // Populate confirmation modal
+      document.getElementById('confirmAmount').textContent = `$${amount.toFixed(2)}`;
+      document.getElementById('confirmMethod').textContent = getMethodName(selectedMethod);
+      document.getElementById('confirmFee').textContent = `$${fee.toFixed(2)}`;
+      document.getElementById('confirmBonus').textContent = `$${bonus.toFixed(2)}`;
+      document.getElementById('confirmTotal').textContent = `$${totalCredit.toFixed(2)}`;
+      
+      // Show confirmation modal
+      document.getElementById('confirmModal').classList.add('show');
+    }
+    
+    // Close confirmation modal
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('show');
+    }
+    
+    // Validate method-specific fields
+    function validateMethodFields() {
+      if (selectedMethod === 'bank') {
+        const bankName = document.getElementById('bankName').value;
+        const accountName = document.getElementById('accountName').value;
+        const accountNumber = document.getElementById('accountNumber').value;
+        const routingNumber = document.getElementById('routingNumber').value;
+        
+        if (!bankName || !accountName || !accountNumber || !routingNumber) {
+          showToast('error', 'Please fill in all bank details');
+          return false;
+        }
+      } else if (selectedMethod === 'crypto') {
+        if (!selectedCrypto) {
+          showToast('error', 'Please select a cryptocurrency');
+          return false;
+        }
+      }
+      
+      return true;
+    }
+    
+    // Get method name
+    function getMethodName(method) {
+      const names = {
+        bank: 'Bank Transfer',
+        crypto: 'Cryptocurrency'
+      };
+      
+      return names[method] || method;
+    }
+    
+    // Submit deposit
+    function submitDeposit() {
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      
+      // Calculate fee and bonus
+      const fee = amount * depositFees[selectedMethod];
+      const bonusTier = bonusTiers.find(tier => amount >= tier.min && amount <= tier.max);
+      const bonus = bonusTier ? amount * bonusTier.bonus : 0;
+      const totalCredit = amount - fee + bonus;
+      
+      // Show loading
+      document.getElementById('loadingOverlay').classList.add('show');
+      closeConfirmModal();
+      
+      // Simulate deposit processing
+      setTimeout(() => {
+        // Hide loading
+        document.getElementById('loadingOverlay').classList.remove('show');
+        
+        // Create deposit entry
+        const entry = {
+          id: generateDepositId(),
+          date: new Date().toISOString(),
+          method: selectedMethod,
+          methodName: getMethodName(selectedMethod),
+          amount: amount,
+          fee: fee,
+          bonus: bonus,
+          totalCredit: totalCredit,
+          status: 'Pending',
+          details: getMethodDetails()
+        };
+        
+        // Save to localStorage
+        let history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+        history.push(entry);
+        localStorage.setItem('depositHistory', JSON.stringify(history));
+        
+        // Reset form
+        document.getElementById('depositForm').reset();
+        document.querySelectorAll('.payment-method-card').forEach(card => {
+          card.classList.remove('selected');
+        });
+        document.querySelectorAll('.amount-preset').forEach(preset => {
+          preset.classList.remove('selected');
+        });
+        document.getElementById('bankDetails').classList.remove('show');
+        document.getElementById('cryptoDetails').classList.remove('show');
+        document.getElementById('networkInfo').style.display = 'none';
+        document.getElementById('walletAddressDisplay').textContent = 'Select a cryptocurrency to generate address';
+        document.getElementById('copyAddressBtn').style.display = 'none';
+        selectedMethod = '';
+        selectedCrypto = null;
+        initCryptoList();
+        updateFeeDisplay();
+        
+        // Show success message
+        showToast('success', `Deposit request of $${amount.toFixed(2)} submitted successfully`);
+        
+        // Update table
+        loadDepositHistory();
+      }, 2000);
+    }
+    
+    // Generate deposit ID
+    function generateDepositId() {
+      const timestamp = Date.now().toString();
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return `DP-${timestamp.slice(-6)}${random}`;
+    }
+    
+    // Get method details
+    function getMethodDetails() {
+      if (selectedMethod === 'bank') {
+        return {
+          bankName: document.getElementById('bankName').value,
+          accountName: document.getElementById('accountName').value,
+          accountNumber: document.getElementById('accountNumber').value,
+          routingNumber: document.getElementById('routingNumber').value
+        };
+      } else if (selectedMethod === 'crypto') {
+        return {
+          cryptoType: selectedCrypto.id,
+          cryptoName: selectedCrypto.name,
+          walletAddress: selectedCrypto.address,
+          network: selectedCrypto.network,
+          transactionId: document.getElementById('transactionId').value
+        };
+      }
+      
+      return {};
+    }
+    
+    // Load deposit history
+    function loadDepositHistory() {
+      const history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+      filteredDeposits = [...history];
+      renderDepositTable();
+    }
+    
+    // Filter deposits
+    function filterDeposits() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const methodFilter = document.getElementById('methodFilter').value;
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      
+      const history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+      
+      filteredDeposits = history.filter(deposit => {
+        // Status filter
+        if (statusFilter && deposit.status !== statusFilter) {
+          return false;
+        }
+        
+        // Method filter
+        if (methodFilter && deposit.method !== methodFilter) {
+          return false;
+        }
+        
+        // Search filter
+        if (searchInput && 
+            !deposit.id.toLowerCase().includes(searchInput) && 
+            !deposit.amount.toString().includes(searchInput)) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      currentPage = 1;
+      renderDepositTable();
+    }
+    
+    // Render deposit table
+    function renderDepositTable() {
+      const tbody = document.getElementById('depositHistory');
+      const emptyState = document.getElementById('emptyState');
+      
+      tbody.innerHTML = '';
+      
+      if (filteredDeposits.length === 0) {
+        emptyState.style.display = 'block';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      
+      // Sort by date (newest first)
+      const sortedDeposits = [...filteredDeposits].sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      // Calculate pagination
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedDeposits = sortedDeposits.slice(startIndex, endIndex);
+      
+      paginatedDeposits.forEach(deposit => {
+        const tr = document.createElement('tr');
+        
+        // Format date
+        const date = new Date(deposit.date);
+        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        
+        // Status badge
+        let statusClass = 'bg-warning';
+        if (deposit.status === 'Completed') statusClass = 'bg-success';
+        if (deposit.status === 'Failed') statusClass = 'bg-danger';
+        if (deposit.status === 'Processing') statusClass = 'bg-info';
+        
+        tr.innerHTML = `
+          <td>${deposit.id}</td>
+          <td>${formattedDate}</td>
+          <td>${deposit.methodName} ${deposit.details.cryptoName ? `(${deposit.details.cryptoName})` : ''}</td>
+          <td>$${deposit.amount.toFixed(2)}</td>
+          <td>$${deposit.bonus.toFixed(2)}</td>
+          <td><span class="badge ${statusClass}">${deposit.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn btn-sm btn-secondary" onclick="viewDepositDetails('${deposit.id}')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        
+        tbody.appendChild(tr);
+      });
+      
+      // Render pagination
+      renderPagination(sortedDeposits.length);
+    }
+    
+    // Render pagination
+    function renderPagination(totalItems) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+      
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      if (totalPages <= 1) {
+        return;
+      }
+      
+      // Previous button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'page-btn';
+      prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderDepositTable();
+        }
+      };
+      pagination.appendChild(prevBtn);
+      
+      // Page numbers
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          renderDepositTable();
+        };
+        pagination.appendChild(pageBtn);
+      }
+      
+      // Next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'page-btn';
+      nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderDepositTable();
+        }
+      };
+      pagination.appendChild(nextBtn);
+    }
+    
+    // View deposit details
+    function viewDepositDetails(id) {
+      const history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+      const deposit = history.find(d => d.id === id);
+      
+      if (!deposit) {
+        showToast('error', 'Deposit not found');
+        return;
+      }
+      
+      // Format date
+      const date = new Date(deposit.date);
+      const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+      
+      // Build details content
+      let detailsHTML = `
+        <div class="deposit-details">
+          <div class="detail-row">
+            <span>Deposit ID:</span>
+            <span>${deposit.id}</span>
+          </div>
+          <div class="detail-row">
+            <span>Date:</span>
+            <span>${formattedDate}</span>
+          </div>
+          <div class="detail-row">
+            <span>Method:</span>
+            <span>${deposit.methodName} ${deposit.details.cryptoName ? `(${deposit.details.cryptoName})` : ''}</span>
+          </div>
+          <div class="detail-row">
+            <span>Amount:</span>
+            <span>$${deposit.amount.toFixed(2)}</span>
+          </div>
+          <div class="detail-row">
+            <span>Processing Fee:</span>
+            <span>$${deposit.fee.toFixed(2)}</span>
+          </div>
+          <div class="detail-row">
+            <span>Bonus Amount:</span>
+            <span>$${deposit.bonus.toFixed(2)}</span>
+          </div>
+          <div class="detail-row">
+            <span>Total Credit:</span>
+            <span>$${deposit.totalCredit.toFixed(2)}</span>
+          </div>
+          <div class="detail-row">
+            <span>Status:</span>
+            <span>${deposit.status}</span>
+          </div>
+        </div>
+      `;
+      
+      // Add method-specific details
+      if (deposit.method === 'bank') {
+        detailsHTML += `
+          <div class="deposit-details" style="margin-top: 1rem;">
+            <h4 style="margin-bottom: 0.5rem;">Bank Details</h4>
+            <div class="detail-row">
+              <span>Bank Name:</span>
+              <span>${deposit.details.bankName}</span>
+            </div>
+            <div class="detail-row">
+              <span>Account Name:</span>
+              <span>${deposit.details.accountName}</span>
+            </div>
+            <div class="detail-row">
+              <span>Account Number:</span>
+              <span>${deposit.details.accountNumber}</span>
+            </div>
+            <div class="detail-row">
+              <span>Routing Number:</span>
+              <span>${deposit.details.routingNumber}</span>
+            </div>
+          </div>
+        `;
+      } else if (deposit.method === 'crypto') {
+        detailsHTML += `
+          <div class="deposit-details" style="margin-top: 1rem;">
+            <h4 style="margin-bottom: 0.5rem;">Cryptocurrency Details</h4>
+            <div class="detail-row">
+              <span>Cryptocurrency:</span>
+              <span>${deposit.details.cryptoName}</span>
+            </div>
+            <div class="detail-row">
+              <span>Wallet Address:</span>
+              <span style="word-break: break-all;">${deposit.details.walletAddress}</span>
+            </div>
+            <div class="detail-row">
+              <span>Network:</span>
+              <span>${deposit.details.network}</span>
+            </div>
+            ${deposit.details.transactionId ? `
+            <div class="detail-row">
+              <span>Transaction ID:</span>
+              <span style="word-break: break-all;">${deposit.details.transactionId}</span>
+            </div>
+            ` : ''}
+          </div>
+        `;
+      }
+      
+      document.getElementById('detailsContent').innerHTML = detailsHTML;
+      document.getElementById('detailsModal').classList.add('show');
+    }
+    
+    // Close details modal
+    function closeDetailsModal() {
+      document.getElementById('detailsModal').classList.remove('show');
+    }
+    
+    // Process pending deposits (simulate)
+    function processPendingDeposits() {
+      const history = JSON.parse(localStorage.getItem('depositHistory')) || [];
+      
+      history.forEach(deposit => {
+        if (deposit.status === 'Pending') {
+          const depositDate = new Date(deposit.date);
+          const now = new Date();
+          const timeDiff = now - depositDate;
+          
+          // Process after 2 minutes for crypto, 1 day for bank
+          let processingTime = 5 * 60 * 1000; // Default 5 minutes
+          
+          if (deposit.method === 'bank') {
+            processingTime = 24 * 60 * 60 * 1000; // 1 day
+          }
+          
+          if (timeDiff > processingTime) {
+            // Randomly decide if completed or failed
+            const isCompleted = Math.random() > 0.1; // 90% chance of completion
+            
+            deposit.status = isCompleted ? 'Completed' : 'Failed';
+            
+            // If completed, update balance
+            if (isCompleted) {
+              balance.live += deposit.totalCredit;
+              localStorage.setItem('account_balance', JSON.stringify(balance));
+              updateBalanceDisplay();
+            }
+          }
+        }
+      });
+      
+      localStorage.setItem('depositHistory', JSON.stringify(history));
+    }
+    
+    // Toggle sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.querySelector('.theme-toggle i');
+      
+      body.classList.toggle('light-theme');
+      
+      if (body.classList.contains('light-theme')) {
+        localStorage.setItem('theme', 'light');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+      } else {
+        localStorage.setItem('theme', 'dark');
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+      }
+    }
+    
+    // Toggle submenu
+    function toggleSubmenu(element) {
+      const submenu = element.nextElementSibling;
+      const icon = element.querySelector('.fa-chevron-down');
+      
+      submenu.classList.toggle('show');
+      icon.classList.toggle('fa-chevron-up');
+    }
+    
+    // Toggle user menu
+    function toggleUserMenu() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('show');
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.user-menu')) {
+          dropdown.classList.remove('show');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    }
+    
+    // Show toast notification
+    function showToast(type, message) {
+      const toastContainer = document.getElementById('toastContainer');
+      
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const iconClass = type === 'success' ? 'fa-check-circle' : 
+                         type === 'error' ? 'fa-exclamation-circle' : 
+                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+      
+      toast.innerHTML = `
+        <i class="fas ${iconClass} toast-icon"></i>
+        <span>${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>

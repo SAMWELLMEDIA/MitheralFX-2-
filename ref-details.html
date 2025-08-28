@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Referral Dashboard - MitheralFX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0b1e;
+      --bg-secondary: #151933;
+      --bg-card: #1a1f3a;
+      --bg-hover: #252b4a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a9c9;
+      --text-muted: #6b7280;
+      --primary: #ffcc00;
+      --primary-dark: #e6b800;
+      --success: #10b981;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --border: #2a3050;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--text-primary), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .dashboard-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .stat-title {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .stat-icon.referrals {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--info);
+    }
+
+    .stat-icon.commission {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .stat-icon.conversion {
+      background: rgba(255, 204, 0, 0.1);
+      color: var(--primary);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-change {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-change.positive {
+      color: var(--success);
+    }
+
+    .referral-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .referral-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+
+    .referral-box:hover {
+      border-color: var(--primary);
+    }
+
+    .referral-link {
+      flex: 1;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      word-break: break-all;
+      padding: 0.5rem;
+      background: var(--bg-primary);
+      border-radius: 6px;
+    }
+
+    .copy-btn {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .copy-btn.copied {
+      background: var(--success);
+      color: white;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chart-filters {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chart-filter {
+      padding: 0.4rem 0.8rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chart-filter:hover {
+      color: var(--text-primary);
+    }
+
+    .chart-filter.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    .referral-table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      width: 200px;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .referral-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .referral-table th {
+      text-align: left;
+      padding: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .referral-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+
+    .referral-table tbody tr:hover {
+      background: var(--bg-hover);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--info), var(--primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--bg-primary);
+      font-size: 0.8rem;
+    }
+
+    .commission-value {
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-badge.active {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .status-badge.inactive {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .page-btn {
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .page-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 1024px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .referral-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+      
+      .search-box input {
+        width: 100%;
+      }
+      
+      .table-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+      
+      .referral-table {
+        font-size: 0.8rem;
+      }
+      
+      .referral-table th,
+      .referral-table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">
+        <i class="fas fa-users"></i>
+        Referral Dashboard
+      </h1>
+      <p class="dashboard-subtitle">Track your referrals and earnings in real-time</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-title">Total Referrals</div>
+          <div class="stat-icon referrals">
+            <i class="fas fa-user-plus"></i>
+          </div>
+        </div>
+        <div class="stat-value">18</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i>
+          <span>12% from last month</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-title">Total Commission</div>
+          <div class="stat-icon commission">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+        </div>
+        <div class="stat-value">$1,960.00</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i>
+          <span>8% from last month</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-title">Conversion Rate</div>
+          <div class="stat-icon conversion">
+            <i class="fas fa-chart-line"></i>
+          </div>
+        </div>
+        <div class="stat-value">24%</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i>
+          <span>3% from last month</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="referral-section">
+      <h3 class="section-title">Your Referral Link</h3>
+      <div class="referral-box">
+        <div class="referral-link" id="referralLink">https://MitheralFX.com/register?ref=PVTRADER2025</div>
+        <button class="copy-btn" id="copyBtn">
+          <i class="fas fa-copy"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Commission Overview</h3>
+          <div class="chart-filters">
+            <div class="chart-filter active" data-period="weekly">Weekly</div>
+            <div class="chart-filter" data-period="monthly">Monthly</div>
+            <div class="chart-filter" data-period="yearly">Yearly</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="commissionChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Referral Sources</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="sourceChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="referral-table-container">
+      <div class="table-header">
+        <h3 class="chart-title">Recent Referrals</h3>
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search referrals..." id="searchInput">
+        </div>
+      </div>
+      
+      <table class="referral-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Date Referred</th>
+            <th>Commission</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="referralTableBody">
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">TO</div>
+                <span>TraderOne</span>
+              </div>
+            </td>
+            <td>2025-06-12</td>
+            <td class="commission-value">$80.00</td>
+            <td><span class="status-badge active">Active</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">FS</div>
+                <span>FxSam</span>
+              </div>
+            </td>
+            <td>2025-06-15</td>
+            <td class="commission-value">$45.00</td>
+            <td><span class="status-badge active">Active</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">GS</div>
+                <span>GoldSignal</span>
+              </div>
+            </td>
+            <td>2025-06-18</td>
+            <td class="commission-value">$120.00</td>
+            <td><span class="status-badge active">Active</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">CP</div>
+                <span>CryptoPro</span>
+              </div>
+            </td>
+            <td>2025-06-20</td>
+            <td class="commission-value">$65.00</td>
+            <td><span class="status-badge inactive">Inactive</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="user-info">
+                <div class="user-avatar">FT</div>
+                <span>ForexTrader</span>
+              </div>
+            </td>
+            <td>2025-06-22</td>
+            <td class="commission-value">$95.00</td>
+            <td><span class="status-badge active">Active</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="pagination">
+        <button class="page-btn" disabled>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Copy referral link functionality
+    const copyBtn = document.getElementById('copyBtn');
+    const referralLink = document.getElementById('referralLink');
+    
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(referralLink.textContent).then(function() {
+        // Update button state
+        copyBtn.classList.add('copied');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> <span>Copied!</span>';
+        
+        // Reset button after 2 seconds
+        setTimeout(function() {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> <span>Copy</span>';
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Failed to copy: ', err);
+      });
+    });
+
+    // Commission Chart
+    const commissionCtx = document.getElementById('commissionChart').getContext('2d');
+    const commissionChart = new Chart(commissionCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: 'Weekly Commission ($)',
+          data: [600, 290, 825, 245],
+          backgroundColor: '#ffcc00',
+          borderRadius: 6,
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: '#1a1f3a',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#2a3050',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+              label: function(context) {
+                return `Commission: $${context.parsed.y}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              color: '#2a3050',
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a0a9c9'
+            }
+          },
+          y: {
+            grid: {
+              color: '#2a3050',
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a0a9c9',
+              callback: function(value) {
+                return '$' + value;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Source Chart
+    const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+    const sourceChart = new Chart(sourceCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Social Media', 'Website', 'Email', 'Other'],
+        datasets: [{
+          data: [45, 25, 20, 10],
+          backgroundColor: [
+            '#ffcc00',
+            '#3b82f6',
+            '#10b981',
+            '#8b5cf6'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#a0a9c9',
+              padding: 20,
+              usePointStyle: true,
+              pointStyle: 'circle'
+            }
+          },
+          tooltip: {
+            backgroundColor: '#1a1f3a',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#2a3050',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.parsed}%`;
+              }
+            }
+          }
+        },
+        cutout: '65%'
+      }
+    });
+
+    // Chart filter functionality
+    const chartFilters = document.querySelectorAll('.chart-filter');
+    chartFilters.forEach(filter => {
+      filter.addEventListener('click', function() {
+        // Update active state
+        chartFilters.forEach(f => f.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Update chart data based on selected period
+        const period = this.dataset.period;
+        let labels, data;
+        
+        if (period === 'weekly') {
+          labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+          data = [600, 290, 825, 245];
+        } else if (period === 'monthly') {
+          labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+          data = [1200, 1900, 1500, 2100, 1800, 1960];
+        } else if (period === 'yearly') {
+          labels = ['2020', '2021', '2022', '2023', '2024', '2025'];
+          data = [3200, 4100, 5300, 6800, 8200, 1960];
+        }
+        
+        commissionChart.data.labels = labels;
+        commissionChart.data.datasets[0].data = data;
+        commissionChart.update();
+      });
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('referralTableBody');
+    const allRows = Array.from(tableBody.querySelectorAll('tr'));
+    
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      allRows.forEach(row => {
+        const userName = row.querySelector('.user-info span').textContent.toLowerCase();
+        if (userName.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pro Trader Request - MitheralFX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-primary: #0a0b1e;
+      --bg-secondary: #151933;
+      --bg-card: #1a1f3a;
+      --bg-hover: #252b4a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a9c9;
+      --text-muted: #6b7280;
+      --primary: #ffcc00;
+      --primary-dark: #e6b800;
+      --success: #10b981;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --border: #2a3050;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+      transition: var(--transition);
+    }
+
+    body.light-mode {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-hover: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 100;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+    }
+
+    .theme-toggle i {
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2.5rem;
+      box-shadow: 0 20px 50px var(--shadow);
+      animation: fadeInUp 0.6s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .form-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
+    }
+
+    .form-control.error {
+      border-color: var(--danger);
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: var(--transition);
+    }
+
+    .error-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .file-upload:hover .file-upload-label {
+      background: var(--bg-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .file-upload-label i {
+      font-size: 1.25rem;
+    }
+
+    .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .progress-container {
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #ffd633);
+      border-radius: 4px;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    .btn {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary), #ffd633);
+      color: #000;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 204, 0, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn i {
+      font-size: 1.25rem;
+    }
+
+    .btn i.fa-spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      color: var(--success);
+      font-weight: 500;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .success-message i {
+      font-size: 1.25rem;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .form-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .info-box i {
+      color: var(--info);
+      font-size: 1.25rem;
+      margin-top: 0.125rem;
+    }
+
+    .info-box-content {
+      flex: 1;
+    }
+
+    .info-box-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .info-box-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 640px) {
+      .form-card {
+        padding: 1.5rem;
+      }
+      
+      .form-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="theme-toggle" onclick="toggleTheme()">
+      <i class="fas fa-moon" id="themeIcon"></i>
+    </div>
+
+    <form id="proForm" class="form-card">
+      <div class="form-header">
+        <h1 class="form-title">
+          <i class="fas fa-user-tie"></i>
+          Pro Trader Request
+        </h1>
+        <p class="form-subtitle">Join our elite community of professional traders</p>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-info-circle"></i>
+        <div class="info-box-content">
+          <div class="info-box-title">Pro Trader Benefits</div>
+          <div class="info-box-text">
+            As a Pro Trader, you'll get access to exclusive features, higher trading limits, and appear on our Top Trader leaderboard.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="type">Verification Type</label>
+        <select id="type" class="form-control" required>
+          <option value="">Select verification type</option>
+          <option value="NIN Slip">National ID Number</option>
+          <option value="Voter ID">Voter's Card</option>
+          <option value="Passport">International Passport</option>
+          <option value="Driver's License">Driver's License</option>
+        </select>
+        <div class="error-message" id="typeError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please select a verification type</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="verifyImg">Verification Document</label>
+        <div class="file-upload">
+          <input type="file" id="verifyImg" accept="image/*" required>
+          <label for="verifyImg" class="file-upload-label">
+            <i class="fas fa-upload"></i>
+            <span>Upload verification document</span>
+          </label>
+        </div>
+        <div class="file-name" id="verifyFileName">No file selected</div>
+        <div class="error-message" id="imgError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please upload a verification document</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="userImg">Profile Picture</label>
+        <div class="file-upload">
+          <input type="file" id="userImg" accept="image/*" required>
+          <label for="userImg" class="file-upload-label">
+            <i class="fas fa-camera"></i>
+            <span>Upload your profile picture</span>
+          </label>
+        </div>
+        <div class="file-name" id="userFileName">No file selected</div>
+        <div class="error-message" id="userImgError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please upload a profile picture</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="desc">Why do you want to be a Pro Trader?</label>
+        <textarea id="desc" class="form-control" rows="4" placeholder="Tell us about your trading experience and why you want to join our Pro Trader program..." required></textarea>
+        <div class="error-message" id="descError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please provide a description</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="percent">Percentage To Be Collected</label>
+        <input type="number" id="percent" class="form-control" min="1" max="100" placeholder="Enter percentage (1-100)" required>
+        <div class="error-message" id="percentError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>Please enter a valid percentage (1-100)</span>
+        </div>
+      </div>
+
+      <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">
+        <i class="fas fa-rocket"></i>
+        <span>Submit Application</span>
+      </button>
+
+      <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <span>Your application has been submitted successfully!</span>
+      </div>
+
+
+  <script>
+    // Theme toggle functionality
+    function setTheme(theme) {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      
+      if (theme === 'light') {
+        body.classList.add('light-mode');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.remove('light-mode');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      if (body.classList.contains('light-mode')) {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+    }
+
+    // Initialize theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        setTheme('light');
+      }
+    });
+
+    // File upload handlers
+    document.getElementById('verifyImg').addEventListener('change', function() {
+      const fileName = this.files[0]?.name || 'No file selected';
+      document.getElementById('verifyFileName').textContent = fileName;
+    });
+
+    document.getElementById('userImg').addEventListener('change', function() {
+      const fileName = this.files[0]?.name || 'No file selected';
+      document.getElementById('userFileName').textContent = fileName;
+    });
+
+    // Form validation and submission
+    document.getElementById('proForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Reset previous errors
+      document.querySelectorAll('.error-message').forEach(msg => {
+        msg.classList.remove('show');
+      });
+      document.querySelectorAll('.form-control').forEach(input => {
+        input.classList.remove('error');
+      });
+      
+      let isValid = true;
+      
+      // Validate verification type
+      const type = document.getElementById('type');
+      if (!type.value) {
+        showError('type', 'typeError');
+        isValid = false;
+      }
+      
+      // Validate verification image
+      const verifyImg = document.getElementById('verifyImg');
+      if (!verifyImg.files.length) {
+        showError('verifyImg', 'imgError');
+        isValid = false;
+      }
+      
+      // Validate user image
+      const userImg = document.getElementById('userImg');
+      if (!userImg.files.length) {
+        showError('userImg', 'userImgError');
+        isValid = false;
+      }
+      
+      // Validate description
+      const desc = document.getElementById('desc');
+      if (!desc.value.trim()) {
+        showError('desc', 'descError');
+        isValid = false;
+      }
+      
+      // Validate percentage
+      const percent = document.getElementById('percent');
+      const percentValue = parseInt(percent.value);
+      if (isNaN(percentValue) || percentValue < 1 || percentValue > 100) {
+        showError('percent', 'percentError');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      // Show progress and update button
+      const submitBtn = document.getElementById('submitBtn');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+      progressContainer.style.display = 'block';
+      
+      // Simulate progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        progressFill.style.width = progress + '%';
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          
+          // Show success message
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Reset form
+            setTimeout(() => {
+              document.getElementById('proForm').reset();
+              document.getElementById('verifyFileName').textContent = 'No file selected';
+              document.getElementById('userFileName').textContent = 'No file selected';
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fas fa-rocket"></i> <span>Submit Application</span>';
+            }, 2000);
+          }, 500);
+        }
+      }, 200);
+    });
+    
+    function showError(inputId, errorId) {
+      document.getElementById(inputId).classList.add('error');
+      document.getElementById(errorId).classList.add('show');
+    }
+  </script>
+</body>
+</html>

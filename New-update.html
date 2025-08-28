@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What's New - MitheralFX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #050714;
+      --bg-secondary: #0a0e27;
+      --bg-card: #0f1428;
+      --bg-hover: #151b3d;
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a8b2d1;
+      --text-muted: #64748b;
+      --text-accent: #60a5fa;
+      
+      /* Brand Colors */
+      --primary: #fbbf24;
+      --primary-light: #fcd34d;
+      --primary-dark: #f59e0b;
+      --secondary: #3b82f6;
+      --secondary-light: #60a5fa;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, #fbbf24, #f59e0b);
+      --gradient-secondary: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --gradient-success: linear-gradient(135deg, #10b981, #059669);
+      --gradient-card: linear-gradient(135deg, rgba(251, 191, 36, 0.1), transparent);
+      
+      /* Borders and Shadows */
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --glow: rgba(251, 191, 36, 0.5);
+      
+      /* Transitions */
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 20px;
+    }
+
+    /* Light Theme Colors */
+    body.light-mode {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-hover: #f8fafc;
+      --bg-glass: rgba(0, 0, 0, 0.03);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-accent: #3b82f6;
+      
+      --border: rgba(0, 0, 0, 0.1);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --glow: rgba(251, 191, 36, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+      transition: var(--transition);
+    }
+
+    /* Animated Background Particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.5;
+      }
+      90% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Announcement Banner */
+    .announcement-banner {
+      background: var(--gradient-primary);
+      color: #000;
+      text-align: center;
+      padding: 1.25rem 2rem;
+      border-radius: var(--rounded);
+      margin-bottom: 3rem;
+      box-shadow: 
+        0 10px 30px var(--shadow),
+        0 0 60px var(--glow);
+      animation: slideDown 0.8s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .announcement-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes slideDown {
+      from { 
+        opacity: 0; 
+        transform: translateY(-30px);
+        filter: blur(10px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .theme-toggle i {
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+
+    .language-selector {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .language-selector select {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      padding-right: 1.5rem;
+    }
+
+    .language-selector::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 1.5rem;
+      pointer-events: none;
+      color: var(--primary);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(40px);
+        filter: blur(10px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    .page-title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      letter-spacing: -1px;
+      text-shadow: 0 0 30px var(--glow);
+    }
+
+    .page-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* Updates Grid */
+    .updates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .update-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      box-shadow: 
+        0 20px 40px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+      position: relative;
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .update-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .update-card:hover::before {
+      opacity: 1;
+    }
+
+    .update-card:nth-child(1) { animation-delay: 0.1s; }
+    .update-card:nth-child(2) { animation-delay: 0.2s; }
+    .update-card:nth-child(3) { animation-delay: 0.3s; }
+    .update-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .update-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 
+        0 30px 60px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .update-header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--gradient-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .update-header::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .update-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      position: relative;
+      z-index: 1;
+    }
+
+    .update-title i {
+      font-size: 1.75rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .update-content {
+      padding: 2rem;
+    }
+
+    .update-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    .update-features {
+      margin-top: 1.5rem;
+    }
+
+    .update-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: var(--bg-glass);
+      border-radius: 12px;
+      transition: var(--transition);
+    }
+
+    .update-feature:hover {
+      background: rgba(251, 191, 36, 0.05);
+      transform: translateX(5px);
+    }
+
+    .update-feature i {
+      color: var(--primary);
+      font-size: 1.25rem;
+      margin-top: 0.1rem;
+    }
+
+    .update-feature-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .update-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2rem;
+      background: var(--bg-hover);
+      border-top: 1px solid var(--border);
+    }
+
+    .update-date {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .update-category {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .update-category.referral {
+      color: var(--info);
+      border-color: var(--info);
+    }
+
+    .update-category.trading {
+      color: var(--success);
+      border-color: var(--success);
+    }
+
+    .update-category.platform {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Timeline Section */
+    .timeline-section {
+      margin: 5rem 0;
+      animation: fadeInUp 0.8s ease-out 0.5s both;
+    }
+
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .timeline-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      background: var(--gradient-secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: var(--gradient-primary);
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 3rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -3.4rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px var(--glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .timeline-date {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--gradient-card);
+      border-radius: 20px;
+    }
+
+    .timeline-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2rem;
+      box-shadow: 
+        0 10px 30px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+    }
+
+    .timeline-content:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 15px 40px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .timeline-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-hover));
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 3rem;
+      text-align: center;
+      margin: 5rem 0;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out 0.7s both;
+    }
+
+    .newsletter-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.05) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    .newsletter-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 600px;
+      margin: 0 auto;
+      gap: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+    }
+
+    .newsletter-btn {
+      padding: 1rem 2rem;
+      background: var(--gradient-primary);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .newsletter-btn:hover::before {
+      left: 100%;
+    }
+
+    .newsletter-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px var(--shadow);
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.25rem 1.75rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transform: translateX(400px);
+      transition: var(--transition);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .notification i {
+      font-size: 1.5rem;
+      color: var(--success);
+    }
+
+    .notification-content {
+      font-weight: 600;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .page-title {
+        font-size: 3rem;
+      }
+      
+      .updates-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2.5rem;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .updates-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .timeline {
+        padding-left: 2rem;
+      }
+      
+      .timeline::before {
+        left: 0;
+      }
+      
+      .timeline-item::before {
+        left: -2.2rem;
+      }
+      
+      .newsletter-form {
+        flex-direction: column;
+      }
+      
+      .notification {
+        right: 1rem;
+        left: 1rem;
+        bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <!-- Announcement Banner -->
+    <div class="announcement-banner">
+      <i class="fas fa-bullhorn fa-bounce"></i>
+      <span id="banner-text">New Features Have Landed! Check out the latest updates below.</span>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="theme-toggle" onclick="toggleMode()">
+        <i class="fas fa-moon" id="theme-icon"></i>
+        <span id="theme-text">Dark Mode</span>
+      </div>
+      
+      <div class="language-selector">
+        <i class="fas fa-globe"></i>
+        <select id="langSwitcher" onchange="switchLang()">
+          <option value="en">🌐 English</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="es">🇪🇸 Spanish</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1 class="page-title">
+        <i class="fas fa-rocket fa-spin"></i>
+        <span id="page-title">What's New</span>
+      </h1>
+      <p class="page-subtitle" id="page-subtitle">
+        Discover the latest features and improvements we've added to enhance your trading experience
+      </p>
+    </div>
+
+    <!-- Updates Grid -->
+    <div class="updates-grid">
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">
+            <i class="fas fa-chart-line fa-pulse"></i>
+            <span id="update1-title">Referral Dashboard Upgraded</span>
+          </div>
+        </div>
+        <div class="update-content">
+          <p class="update-description" id="update1-text">
+            Track your total referrals, commissions, and get your own referral link with a brand new user-friendly dashboard and performance chart.
+          </p>
+          <div class="update-features">
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Real-time commission tracking</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Custom referral links</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Performance analytics</div>
+            </div>
+          </div>
+        </div>
+        <div class="update-footer">
+          <div class="update-date">
+            <i class="far fa-calendar-alt"></i>
+            <span>June 21, 2025</span>
+          </div>
+          <div class="update-category referral">
+            <i class="fas fa-user-friends"></i>
+            <span id="cat1">Referral & Commissions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">
+            <i class="fas fa-cogs fa-spin"></i>
+            <span id="update2-title">Live Trading Interface Enhanced</span>
+          </div>
+        </div>
+        <div class="update-content">
+          <p class="update-description" id="update2-text">
+            Experience faster chart rendering and new currency pair dropdown for improved user control. Smoother animations and real-time updates now included.
+          </p>
+          <div class="update-features">
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">50% faster chart rendering</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Advanced currency pair selector</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Real-time market data</div>
+            </div>
+          </div>
+        </div>
+        <div class="update-footer">
+          <div class="update-date">
+            <i class="far fa-calendar-alt"></i>
+            <span>June 20, 2025</span>
+          </div>
+          <div class="update-category trading">
+            <i class="fas fa-exchange-alt"></i>
+            <span id="cat2">Trading Experience</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">
+            <i class="fas fa-globe"></i>
+            <span id="update3-title">New Domain Activated</span>
+          </div>
+        </div>
+        <div class="update-content">
+          <p class="update-description" id="update3-text">
+            We've officially launched on our custom domain: <strong>ethereal.mobi.ng</strong>. Bookmark it for direct access to our broker dashboard.
+          </p>
+          <div class="update-features">
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Custom domain</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Improved loading times</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Enhanced security</div>
+            </div>
+          </div>
+        </div>
+        <div class="update-footer">
+          <div class="update-date">
+            <i class="far fa-calendar-alt"></i>
+            <span>June 18, 2025</span>
+          </div>
+          <div class="update-category platform">
+            <i class="fas fa-tools"></i>
+            <span id="cat3">Platform Updates</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="update-card">
+        <div class="update-header">
+          <div class="update-title">
+            <i class="fas fa-lock"></i>
+            <span id="update4-title">Improved Security & HTTPS Support</span>
+          </div>
+        </div>
+        <div class="update-content">
+          <p class="update-description" id="update4-text">
+            Your data is now safer. Our website now fully supports HTTPS with encryption for all user sessions.
+          </p>
+          <div class="update-features">
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">End-to-end encryption</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">SSL certificate</div>
+            </div>
+            <div class="update-feature">
+              <i class="fas fa-check-circle"></i>
+              <div class="update-feature-text">Secure data transmission</div>
+            </div>
+          </div>
+        </div>
+        <div class="update-footer">
+          <div class="update-date">
+            <i class="far fa-calendar-alt"></i>
+            <span>June 15, 2025</span>
+          </div>
+          <div class="update-category platform">
+            <i class="fas fa-tools"></i>
+            <span>Platform Updates</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Section -->
+    <div class="timeline-section">
+      <div class="timeline-header">
+        <h2 class="timeline-title">Release Timeline</h2>
+        <p class="page-subtitle">Our journey of continuous improvement</p>
+      </div>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">June 2025</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Major Platform Update</div>
+            <p class="timeline-description">Launched referral dashboard, enhanced trading interface, and improved security features.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">May 2025</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Mobile App Release</div>
+            <p class="timeline-description">Introduced our mobile trading application for iOS and Android platforms.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">April 2025</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Advanced Charting Tools</div>
+            <p class="timeline-description">Added technical indicators and drawing tools for better market analysis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <div class="newsletter-section">
+      <h2 class="newsletter-title">Stay Updated</h2>
+      <p class="newsletter-description">
+        Subscribe to our newsletter to receive the latest updates and features directly in your inbox.
+      </p>
+      <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+        <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+        <button type="submit" class="newsletter-btn">
+          <i class="fas fa-paper-plane"></i>
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <div class="notification-content">Successfully subscribed!</div>
+  </div>
+
+  <script>
+    // Generate animated particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Theme toggle functionality
+    function toggleMode() {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      const themeText = document.getElementById('theme-text');
+      
+      if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        themeIcon.className = 'fas fa-moon';
+        themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.add('light-mode');
+        themeIcon.className = 'fas fa-sun';
+        themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Initialize theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+        document.getElementById('theme-text').textContent = 'Light Mode';
+      }
+      
+      // Create particles
+      createParticles();
+    });
+
+    // Translation data
+    const translations = {
+      en: {
+        banner: "New Features Have Landed! Check out the latest updates below.",
+        page_title: "What's New",
+        page_subtitle: "Discover the latest features and improvements we've added to enhance your trading experience",
+        cat1: "Referral & Commissions",
+        cat2: "Trading Experience",
+        cat3: "Platform Updates",
+        update1: {
+          title: "Referral Dashboard Upgraded",
+          text: "Track your total referrals, commissions, and get your own referral link with a brand new user-friendly dashboard and performance chart."
+        },
+        update2: {
+          title: "Live Trading Interface Enhanced",
+          text: "Experience faster chart rendering and new currency pair dropdown for improved user control. Smoother animations and real-time updates now included."
+        },
+        update3: {
+          title: "New Domain Activated",
+          text: "We've officially launched on our custom domain: ethereal.mobi.ng. Bookmark it for direct access to our broker dashboard."
+        },
+        update4: {
+          title: "Improved Security & HTTPS Support",
+          text: "Your data is now safer. Our website now fully supports HTTPS with encryption for all user sessions."
+        }
+      },
+      fr: {
+        banner: "Nouvelles fonctionnalités disponibles ! Découvrez les dernières mises à jour ci-dessous.",
+        page_title: "Quoi de neuf",
+        page_subtitle: "Découvrez les dernières fonctionnalités et améliorations que nous avons ajoutées pour améliorer votre expérience de trading",
+        cat1: "Parrainage & Commissions",
+        cat2: "Expérience de Trading",
+        cat3: "Mises à jour de la plateforme",
+        update1: {
+          title: "Tableau de bord des parrainages amélioré",
+          text: "Suivez vos parrainages, commissions, et obtenez votre lien personnalisé dans un nouveau tableau de bord convivial."
+        },
+        update2: {
+          title: "Interface de trading en direct améliorée",
+          text: "Affichage plus rapide des graphiques, nouveau menu déroulant des paires de devises et animations plus fluides."
+        },
+        update3: {
+          title: "Nouveau domaine activé",
+          text: "Nous avons officiellement lancé notre domaine : ethereal.mobi.ng. Ajoutez-le à vos favoris !"
+        },
+        update4: {
+          title: "Sécurité et HTTPS améliorés",
+          text: "Vos données sont désormais mieux protégées grâce au chiffrement HTTPS sur toutes les sessions."
+        }
+      },
+      es: {
+        banner: "¡Nuevas funciones disponibles! Mira las últimas novedades abajo.",
+        page_title: "Novedades",
+        page_subtitle: "Descubre las últimas funciones y mejoras que hemos agregado para mejorar tu experiencia de trading",
+        cat1: "Referidos y Comisiones",
+        cat2: "Experiencia de Trading",
+        cat3: "Actualizaciones de Plataforma",
+        update1: {
+          title: "Panel de referidos mejorado",
+          text: "Monitorea tus referidos, comisiones y obtén tu enlace personal en un nuevo panel más amigable."
+        },
+        update2: {
+          title: "Interfaz de Trading en Vivo Mejorada",
+          text: "Renderizado más rápido, selector de divisas mejorado y animaciones más suaves ahora disponibles."
+        },
+        update3: {
+          title: "Nuevo Dominio Activado",
+          text: "Ya estamos activos en nuestro nuevo dominio: ethereal.mobi.ng. ¡Guárdalo!"
+        },
+        update4: {
+          title: "Seguridad mejorada y soporte HTTPS",
+          text: "Tu información está más segura. El sitio ahora soporta HTTPS con cifrado completo."
+        }
+      }
+    };
+
+    // Language switcher functionality
+    function switchLang() {
+      const lang = document.getElementById("langSwitcher").value;
+      const t = translations[lang];
+      
+      // Update banner
+      document.getElementById("banner-text").innerHTML = `<i class="fas fa-bullhorn fa-bounce"></i> ${t.banner}`;
+      
+      // Update page title and subtitle
+      document.getElementById("page-title").innerHTML = `<i class="fas fa-rocket fa-spin"></i> ${t.page_title}`;
+      document.getElementById("page-subtitle").textContent = t.page_subtitle;
+      
+      // Update categories
+      document.getElementById("cat1").textContent = t.cat1;
+      document.getElementById("cat2").textContent = t.cat2;
+      document.getElementById("cat3").textContent = t.cat3;
+      
+      // Update update cards
+      document.getElementById("update1-title").innerHTML = `<i class="fas fa-chart-line fa-pulse"></i> ${t.update1.title}`;
+      document.getElementById("update1-text").textContent = t.update1.text;
+      document.getElementById("update2-title").innerHTML = `<i class="fas fa-cogs fa-spin"></i> ${t.update2.title}`;
+      document.getElementById("update2-text").textContent = t.update2.text;
+      document.getElementById("update3-title").innerHTML = `<i class="fas fa-globe"></i> ${t.update3.title}`;
+      document.getElementById("update3-text").textContent = t.update3.text;
+      document.getElementById("update4-title").innerHTML = `<i class="fas fa-lock"></i> ${t.update4.title}`;
+      document.getElementById("update4-text").textContent = t.update4.text;
+    }
+
+    function subscribeNewsletter(event) {
+      event.preventDefault();
+      const email = event.target.querySelector('input[type="email"]').value;
+      const notification = document.getElementById('notification');
+      const notificationContent = notification.querySelector('.notification-content');
+      
+      notificationContent.textContent = `Successfully subscribed with ${email}!`;
+      notification.classList.add('show');
+      
+      // Remove notification after 5 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+      
+      // Reset form
+      event.target.reset();
+    }
+  </script>
+</body>
+</html>

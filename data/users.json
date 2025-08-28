@@ -1,0 +1,312 @@
+[
+  {
+    "id": "demo-user-123",
+    "email": "demo@mitheralfx.com",
+    "password": "$2a$10$Cop/jmsqEFkNs7Wu.9s6i.uhcJfSqOfKelVHKygzrDFmIs8LB2wUO",
+    "firstName": "Demo",
+    "lastName": "User",
+    "accountType": "demo",
+    "balance": {
+      "demo": 10000,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T08:11:23.741Z",
+    "lastLogin": "2025-08-27T08:11:23.741Z",
+    "trades": 0,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756282474895-kuvqshcyc",
+    "firstName": "Dumkwu",
+    "lastName": "Samuel",
+    "email": "samueldumkwu427@gmail.com",
+    "password": "$2a$10$J3qfspC6EMzhW1FGm0v1ROjOVxOLmjYDux/EG2500bNIGOarNvKlm",
+    "accountType": "personal",
+    "phone": "+2 (348) 134-5131",
+    "country": "US",
+    "balance": {
+      "demo": 12947.171090039456,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T08:14:34.895Z",
+    "lastLogin": "2025-08-28T20:20:27.405Z",
+    "trades": 2,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756282698807-q89344nmk",
+    "firstName": "Micheal",
+    "lastName": "Ogunlase",
+    "email": "sam@gmail.com",
+    "password": "$2a$10$dmIBZnlnyWZmjpv5P1sTrelJh7bCQSxGvmC2OzQrGgCz/3JKwv4py",
+    "accountType": "personal",
+    "phone": "+2 (347) 045-6342",
+    "country": "CA",
+    "balance": {
+      "demo": 10000,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T08:18:18.807Z",
+    "lastLogin": "2025-08-27T08:18:18.807Z",
+    "trades": 0,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756285596903-tqdexy18h",
+    "firstName": "Dumkwu",
+    "lastName": "Samuel",
+    "email": "sdumkwu@gmail.com",
+    "password": "$2a$10$rk2V4DaaCUnBBGaffDM4l.kZdtZ3AbMoVHONYbdtkefVOi1iHeM7S",
+    "accountType": "personal",
+    "phone": "+2 (348) 134-5136",
+    "country": "DE",
+    "balance": {
+      "demo": 13447.171090039456,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T09:06:36.903Z",
+    "lastLogin": "2025-08-28T10:16:55.929Z",
+    "trades": 5,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756286152161-y4oztzksq",
+    "firstName": "Dumkwu",
+    "lastName": "victoria",
+    "email": "vicdumkwu427@gmail.com",
+    "password": "$2a$10$1s.4EVXpBAHzdFNxS.0UgOYeqgv6Ixlnf4F8hpKYLVhoDKLLMj7ZS",
+    "accountType": "business",
+    "phone": "+2 (348) 134-5131",
+    "country": "CA",
+    "balance": {
+      "demo": 15397.171090039456,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T09:15:52.161Z",
+    "lastLogin": "2025-08-28T20:21:05.960Z",
+    "trades": 3,
+    "totalProfit": -1.4094626288163696,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756290561934-8sl6c491a",
+    "firstName": "Micheal",
+    "lastName": "Ogunlase",
+    "email": "samueldumkwu@gmail.com",
+    "password": "$2a$10$95wBVtKrHlGItLU1ufR4xOJ8JvDWp2MYGh8l84bv6NTPUw6ehYPpK",
+    "accountType": "personal",
+    "phone": "+2 (347) 045-6342",
+    "country": "CA",
+    "balance": {
+      "demo": 15546,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T10:29:21.934Z",
+    "lastLogin": "2025-08-28T10:16:23.302Z",
+    "trades": 6,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756290901033-gmnikaa4n",
+    "firstName": "KIMBERLY",
+    "lastName": "GIBBS",
+    "email": "samueldumkwu27@gmail.com",
+    "password": "$2a$10$vasK/DhzyfeCVCLK7/OGwuotDxKjjurV7XofEsXZyEbhlfgppVmCa",
+    "accountType": "personal",
+    "phone": "+2 (348) 134-5131",
+    "country": "AU",
+    "balance": {
+      "demo": 9900,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-27T10:35:01.033Z",
+    "lastLogin": "2025-08-27T10:35:48.851Z",
+    "trades": 1,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756340494141-0bd30myfv",
+    "firstName": "Precious",
+    "lastName": "Lawal",
+    "email": "preciouslawal@gmail.com",
+    "password": "$2a$10$Mjm9INRfqHjbdTnPSJetiePEy1InsV/oFgOoeI96Q42.TYtFPykMi",
+    "accountType": "personal",
+    "phone": "+0 (701) 194-6028",
+    "country": "CA",
+    "balance": {
+      "demo": 10000,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-28T00:21:34.141Z",
+    "lastLogin": "2025-08-28T10:02:51.412Z",
+    "trades": 0,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  },
+  {
+    "id": "user-1756344743895-ejd2wux94",
+    "firstName": "King",
+    "lastName": "Chris",
+    "email": "kingchris@gmail.com",
+    "password": "$2a$10$2w7wMCnldOw93lWMOW3lde4zVkf3N8p4Iy0SKd9MD82a0TtwT4qPq",
+    "accountType": "personal",
+    "phone": "O8134513137",
+    "country": "US",
+    "balance": {
+      "demo": 17000,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-28T01:32:23.895Z",
+    "lastLogin": "2025-08-28T11:26:24.340Z",
+    "trades": 1,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    },
+    "dob": "2005-05-11",
+    "bio": "FOREX GURU"
+  },
+  {
+    "id": "user-1756379374267-aoe56qysf",
+    "firstName": "ESTHER",
+    "lastName": "DUMKWU",
+    "email": "samdumkwu@gmail.com",
+    "password": "$2a$10$KWfTQ4so.NReZ1IM.K1JLOtapN6Z36evcfqjZ5MQcN7iyrneFDMBy",
+    "accountType": "business",
+    "phone": "+0 (701) 194-6028",
+    "country": "AU",
+    "balance": {
+      "demo": 10000,
+      "live": 0
+    },
+    "level": "Beginner",
+    "vipStatus": "Standard",
+    "joinDate": "2025-08-28T11:09:34.267Z",
+    "lastLogin": "2025-08-28T11:09:59.570Z",
+    "trades": 0,
+    "totalProfit": 0,
+    "winRate": 0,
+    "preferences": {
+      "language": "en",
+      "timezone": "UTC",
+      "currency": "USD",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    }
+  }
+]

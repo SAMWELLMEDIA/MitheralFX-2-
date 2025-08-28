@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MitheralFX - Economic Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #050714;
+      --bg-secondary: #0a0e27;
+      --bg-card: #0f1428;
+      --bg-hover: #151b3d;
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a8b2d1;
+      --text-muted: #64748b;
+      
+      /* Accent Colors */
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --gold: #ffd700;
+      
+      /* Importance Colors */
+      --low: #10b981;
+      --medium: #f59e0b;
+      --high: #ef4444;
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
+      --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+      --gradient-danger: linear-gradient(135deg, #ef4444, #f87171);
+      --gradient-gold: linear-gradient(135deg, #ffd700, #ffed4e);
+      
+      /* Borders and Shadows */
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --glow: rgba(99, 102, 241, 0.3);
+      
+      /* Transitions */
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 20px;
+    }
+    
+    /* Light Theme Colors */
+    body.light-mode {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-hover: #f8fafc;
+      --bg-glass: rgba(0, 0, 0, 0.03);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      
+      --border: rgba(0, 0, 0, 0.1);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --glow: rgba(99, 102, 241, 0.2);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      transition: var(--transition);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 100;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+    
+    .theme-toggle i {
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+    
+    /* Header */
+    .header {
+      margin-bottom: 3rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px);
+        filter: blur(10px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+    
+    .page-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+    
+    .page-description {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
+    
+    /* Filter Section */
+    .filter-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+    
+    .filter-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .filter-title i {
+      color: var(--primary);
+    }
+    
+    .filter-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .filter-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    .filter-input {
+      padding: 0.8rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+    
+    .filter-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    .filter-select {
+      padding: 0.8rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    .filter-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Calendar Section */
+    .calendar-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .calendar-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .calendar-title i {
+      color: var(--primary);
+    }
+    
+    .calendar-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .calendar-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .calendar-nav-btn:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+    }
+    
+    .calendar-date {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    /* Calendar Grid */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .calendar-day-header {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .calendar-day {
+      background: var(--bg-card);
+      min-height: 100px;
+      padding: 0.5rem;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .calendar-day:hover {
+      background: var(--bg-hover);
+    }
+    
+    .calendar-day.other-month {
+      color: var(--text-muted);
+      background: var(--bg-secondary);
+    }
+    
+    .calendar-day.today {
+      background: var(--bg-glass);
+      border: 1px solid var(--primary);
+    }
+    
+    .calendar-day.selected {
+      background: var(--gradient-primary);
+      color: white;
+    }
+    
+    .calendar-day-number {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .calendar-day-events {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    
+    .calendar-event-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-left: auto;
+    }
+    
+    .calendar-event-indicator.low {
+      background: var(--low);
+    }
+    
+    .calendar-event-indicator.medium {
+      background: var(--medium);
+    }
+    
+    .calendar-event-indicator.high {
+      background: var(--high);
+    }
+    
+    /* Calendar Table */
+    .calendar-table-container {
+      margin-top: 2rem;
+    }
+    
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    
+    .calendar-table th,
+    .calendar-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .calendar-table th {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+    
+    .calendar-table tr:hover {
+      background: var(--bg-hover);
+    }
+    
+    .event-time {
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    
+    .event-country {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .country-flag {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .event-name {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .event-importance {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 0.5rem;
+    }
+    
+    .event-importance.low {
+      background: var(--low);
+    }
+    
+    .event-importance.medium {
+      background: var(--medium);
+    }
+    
+    .event-importance.high {
+      background: var(--high);
+    }
+    
+    .event-values {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .event-value {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    
+    .event-value-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .event-value-number {
+      font-weight: 600;
+    }
+    
+    .event-value-number.positive {
+      color: var(--success);
+    }
+    
+    .event-value-number.negative {
+      color: var(--danger);
+    }
+    
+    /* Event Details Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: var(--transition);
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      transform: rotate(90deg);
+    }
+    
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .modal-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .modal-section-title {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .modal-section-content {
+      font-size: 1.1rem;
+    }
+    
+    /* Impact Legend */
+    .impact-legend {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+    
+    .legend-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .legend-title i {
+      color: var(--primary);
+    }
+    
+    .legend-items {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+    
+    .legend-color.low {
+      background: var(--low);
+    }
+    
+    .legend-color.medium {
+      background: var(--medium);
+    }
+    
+    .legend-color.high {
+      background: var(--high);
+    }
+    
+    /* News Section */
+    .news-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+    
+    .news-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .news-title i {
+      color: var(--primary);
+    }
+    
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .news-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px var(--shadow);
+    }
+    
+    .news-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .news-card-time {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    .news-card-importance {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    
+    .news-card-importance.low {
+      background: var(--low);
+    }
+    
+    .news-card-importance.medium {
+      background: var(--medium);
+    }
+    
+    .news-card-importance.high {
+      background: var(--high);
+    }
+    
+    .news-card-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .news-card-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.25rem 1.75rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transform: translateX(400px);
+      transition: var(--transition);
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      border-left: 4px solid var(--success);
+    }
+    
+    .notification i {
+      font-size: 1.5rem;
+      color: var(--success);
+    }
+    
+    .notification-content {
+      font-weight: 600;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2.2rem;
+      }
+      
+      .filter-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      .calendar-grid {
+        font-size: 0.8rem;
+      }
+      
+      .calendar-day {
+        min-height: 80px;
+      }
+      
+      .calendar-table {
+        font-size: 0.9rem;
+      }
+      
+      .calendar-table th,
+      .calendar-table td {
+        padding: 0.8rem 0.5rem;
+      }
+      
+      .event-values {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-moon" id="theme-icon"></i>
+  </button>
+  
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="page-title">Economic Calendar</h1>
+      <p class="page-description">
+        Track important economic events, indicators, and announcements that impact financial markets. 
+        Stay informed with real-time updates and analysis.
+      </p>
+    </header>
+    
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <h2 class="filter-title">
+        <i class="fas fa-filter"></i>
+        Filter Events
+      </h2>
+      
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label class="filter-label">Start Date</label>
+          <input type="date" class="filter-input" id="startDate">
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">End Date</label>
+          <input type="date" class="filter-input" id="endDate">
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Country</label>
+          <select class="filter-select" id="countryFilter">
+            <option value="all">All Countries</option>
+            <option value="us">United States</option>
+            <option value="eu">European Union</option>
+            <option value="uk">United Kingdom</option>
+            <option value="jp">Japan</option>
+            <option value="cn">China</option>
+            <option value="de">Germany</option>
+            <option value="fr">France</option>
+            <option value="ca">Canada</option>
+            <option value="au">Australia</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Importance</label>
+          <select class="filter-select" id="importanceFilter">
+            <option value="all">All Levels</option>
+            <option value="high">High Impact</option>
+            <option value="medium">Medium Impact</option>
+            <option value="low">Low Impact</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filter-actions">
+        <button class="btn btn-primary" onclick="applyFilters()">
+          <i class="fas fa-search"></i>
+          Apply Filters
+        </button>
+        <button class="btn btn-secondary" onclick="resetFilters()">
+          <i class="fas fa-undo"></i>
+          Reset
+        </button>
+      </div>
+    </div>
+    
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <div class="calendar-header">
+        <h2 class="calendar-title">
+          <i class="fas fa-calendar-alt"></i>
+          Economic Calendar
+        </h2>
+        
+        <div class="calendar-nav">
+          <button class="calendar-nav-btn" onclick="changeMonth(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="calendar-date" id="currentMonth">November 2023</div>
+          <button class="calendar-nav-btn" onclick="changeMonth(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Calendar Grid -->
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Calendar days will be dynamically generated here -->
+      </div>
+      
+      <!-- Calendar Table -->
+      <div class="calendar-table-container">
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">
+          Events for <span id="selectedDate">Today</span>
+        </h3>
+        
+        <table class="calendar-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Country</th>
+              <th>Event</th>
+              <th>Values</th>
+            </tr>
+          </thead>
+          <tbody id="calendarTableBody">
+            <!-- Calendar events will be dynamically generated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Impact Legend -->
+    <div class="impact-legend">
+      <h3 class="legend-title">
+        <i class="fas fa-info-circle"></i>
+        Impact Legend
+      </h3>
+      
+      <div class="legend-items">
+        <div class="legend-item">
+          <div class="legend-color high"></div>
+          <span>High Impact</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color medium"></div>
+          <span>Medium Impact</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color low"></div>
+          <span>Low Impact</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- News Section -->
+    <div class="news-section">
+      <h2 class="news-title">
+        <i class="fas fa-newspaper"></i>
+        Related News
+      </h2>
+      
+      <div class="news-grid" id="newsGrid">
+        <!-- News cards will be dynamically generated here -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Event Details Modal -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Event Details</h3>
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body" id="modalBody">
+        <!-- Modal content will be dynamically generated here -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <div class="notification-content"></div>
+  </div>
+  
+  <script>
+    // Economic events data
+    const economicEvents = [
+      {
+        id: 1,
+        date: '2023-11-15',
+        time: '08:30',
+        country: 'us',
+        countryName: 'United States',
+        event: 'Non-Farm Payrolls',
+        importance: 'high',
+        forecast: '180K',
+        previous: '150K',
+        actual: '195K',
+        description: 'The Non-Farm Payrolls report measures the change in the number of people employed during the previous month, excluding the farming industry.'
+      },
+      {
+        id: 2,
+        date: '2023-11-15',
+        time: '10:00',
+        country: 'eu',
+        countryName: 'European Union',
+        event: 'ECB Interest Rate Decision',
+        importance: 'high',
+        forecast: '4.0%',
+        previous: '4.0%',
+        actual: '4.25%',
+        description: 'The European Central Bank announces its interest rate decision, which influences borrowing costs throughout the economy.'
+      },
+      {
+        id: 3,
+        date: '2023-11-15',
+        time: '13:30',
+        country: 'ca',
+        countryName: 'Canada',
+        event: 'Employment Change',
+        importance: 'medium',
+        forecast: '20K',
+        previous: '18K',
+        actual: '22K',
+        description: 'The Employment Change measures the change in the number of people employed in Canada.'
+      },
+      {
+        id: 4,
+        date: '2023-11-16',
+        time: '09:30',
+        country: 'uk',
+        countryName: 'United Kingdom',
+        event: 'CPI (MoM)',
+        importance: 'high',
+        forecast: '0.4%',
+        previous: '0.5%',
+        actual: '0.6%',
+        description: 'The Consumer Price Index (CPI) measures the change in the price of goods and services from the perspective of the consumer.'
+      },
+      {
+        id: 5,
+        date: '2023-11-16',
+        time: '23:50',
+        country: 'jp',
+        countryName: 'Japan',
+        event: 'GDP (QoQ)',
+        importance: 'high',
+        forecast: '0.2%',
+        previous: '0.1%',
+        actual: '0.3%',
+        description: 'The Gross Domestic Product (GDP) measures the change in the inflation-adjusted value of all goods and services produced in the economy.'
+      },
+      {
+        id: 6,
+        date: '2023-11-17',
+        time: '02:00',
+        country: 'cn',
+        countryName: 'China',
+        event: 'Industrial Production (YoY)',
+        importance: 'medium',
+        forecast: '4.6%',
+        previous: '4.5%',
+        actual: '4.8%',
+        description: 'Industrial Production measures the change in the total inflation-adjusted value of output produced by manufacturers, mines, and utilities.'
+      },
+      {
+        id: 7,
+        date: '2023-11-17',
+        time: '07:00',
+        country: 'de',
+        countryName: 'Germany',
+        event: 'ZEW Economic Sentiment',
+        importance: 'medium',
+        forecast: '-5.0',
+        previous: '-4.5',
+        actual: '-3.2',
+        description: 'The ZEW Economic Sentiment measures the level of optimism that analysts have about the current economic situation.'
+      },
+      {
+        id: 8,
+        date: '2023-11-17',
+        time: '14:30',
+        country: 'us',
+        countryName: 'United States',
+        event: 'Building Permits',
+        importance: 'low',
+        forecast: '1.45M',
+        previous: '1.47M',
+        actual: '1.43M',
+        description: 'Building Permits measures the change in the number of new building permits issued by the government.'
+      },
+      {
+        id: 9,
+        date: '2023-11-20',
+        time: '09:00',
+        country: 'eu',
+        countryName: 'European Union',
+        event: 'Current Account',
+        importance: 'medium',
+        forecast: '€15.0B',
+        previous: '€14.2B',
+        actual: '€16.5B',
+        description: 'The Current Account measures the difference in value between imported and exported goods, services, and transfers.'
+      },
+      {
+        id: 10,
+        date: '2023-11-21',
+        time: '13:30',
+        country: 'us',
+        countryName: 'United States',
+        event: 'Unemployment Claims',
+        importance: 'medium',
+        forecast: '220K',
+        previous: '218K',
+        actual: '215K',
+        description: 'Unemployment Claims measures the number of individuals who filed for unemployment insurance for the first time during the past week.'
+      },
+      {
+        id: 11,
+        date: '2023-11-22',
+        time: '10:30',
+        country: 'uk',
+        countryName: 'United Kingdom',
+        event: 'Retail Sales (MoM)',
+        importance: 'high',
+        forecast: '0.3%',
+        previous: '0.5%',
+        actual: '0.4%',
+        description: 'Retail Sales measures the change in the total value of sales at the retail level.'
+      },
+      {
+        id: 12,
+        date: '2023-11-23',
+        time: '15:00',
+        country: 'us',
+        countryName: 'United States',
+        event: 'Existing Home Sales',
+        importance: 'low',
+        forecast: '3.95M',
+        previous: '3.96M',
+        actual: '4.02M',
+        description: 'Existing Home Sales measures the annualized number of existing residential buildings that were sold during the previous month.'
+      }
+    ];
+    
+    // Related news data
+    const relatedNews = [
+      {
+        id: 1,
+        time: '2 hours ago',
+        importance: 'high',
+        title: 'Federal Reserve Signals Potential Rate Pause After Strong Jobs Data',
+        description: 'The Federal Reserve may pause interest rate hikes following stronger-than-expected employment figures, according to recent statements from Fed officials.'
+      },
+      {
+        id: 2,
+        time: '4 hours ago',
+        importance: 'medium',
+        title: 'Euro Zone Inflation Remains Sticky, ECB Watchers Say',
+        description: 'Economists predict that the European Central Bank will maintain higher interest rates for longer as inflation in the euro zone remains above target.'
+      },
+      {
+        id: 3,
+        time: '6 hours ago',
+        importance: 'high',
+        title: 'UK Economy Shows Resilience Despite Global Headwinds',
+        description: 'Recent economic data suggests the UK economy is performing better than expected, with strong employment figures and consumer spending.'
+      },
+      {
+        id: 4,
+        time: '8 hours ago',
+        importance: 'low',
+        title: 'Japanese Yen Weakens on BOJ Policy Divergence',
+        description: 'The Japanese yen continues to weaken against major currencies as the Bank of Japan maintains its ultra-loose monetary policy.'
+      },
+      {
+        id: 5,
+        time: '10 hours ago',
+        importance: 'medium',
+        title: 'China\'s Industrial Sector Shows Signs of Recovery',
+        description: 'China\'s industrial production data indicates a gradual recovery in the manufacturing sector, supported by government stimulus measures.'
+      },
+      {
+        id: 6,
+        time: '12 hours ago',
+        importance: 'high',
+        title: 'German Economic Sentiment Improves Unexpectedly',
+        description: 'The ZEW Economic Sentiment Index for Germany improved more than expected, suggesting growing optimism about the economic outlook.'
+      }
+    ];
+    
+    // Current month and year
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDate = new Date();
+    
+    // Filtered events
+    let filteredEvents = [...economicEvents];
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load saved theme
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+      }
+      
+      // Set default dates
+      const today = new Date();
+      const nextWeek = new Date(today);
+      nextWeek.setDate(today.getDate() + 7);
+      
+      document.getElementById('startDate').value = formatDateForInput(today);
+      document.getElementById('endDate').value = formatDateForInput(nextWeek);
+      
+      // Update current month display
+      updateCurrentMonthDisplay();
+      
+      // Render calendar
+      renderCalendar();
+      
+      // Render calendar events for selected date
+      renderCalendarEvents();
+      
+      // Render related news
+      renderRelatedNews();
+      
+      // Auto-refresh every 5 minutes
+      setInterval(() => {
+        // Simulate real-time updates
+        simulateRealTimeUpdates();
+      }, 300000);
+    });
+    
+    // Format date for input field
+    function formatDateForInput(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    // Update current month display
+    function updateCurrentMonthDisplay() {
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      
+      document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+    
+    // Change month
+    function changeMonth(direction) {
+      currentMonth += direction;
+      
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      
+      updateCurrentMonthDisplay();
+      renderCalendar();
+    }
+    
+    // Render calendar
+    function renderCalendar() {
+      const calendarGrid = document.getElementById('calendarGrid');
+      calendarGrid.innerHTML = '';
+      
+      // Add day headers
+      const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      dayHeaders.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        calendarGrid.appendChild(dayHeader);
+      });
+      
+      // Get first day of month and number of days
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // Add empty cells for days before the first day of the month
+      for (let i = 0; i < firstDay; i++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day other-month';
+        calendarGrid.appendChild(dayCell);
+      }
+      
+      // Add cells for each day of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day';
+        
+        // Check if this is today
+        const today = new Date();
+        if (currentYear === today.getFullYear() && 
+            currentMonth === today.getMonth() && 
+            day === today.getDate()) {
+          dayCell.classList.add('today');
+        }
+        
+        // Check if this is the selected date
+        if (currentYear === selectedDate.getFullYear() && 
+            currentMonth === selectedDate.getMonth() && 
+            day === selectedDate.getDate()) {
+          dayCell.classList.add('selected');
+        }
+        
+        // Add day number
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'calendar-day-number';
+        dayNumber.textContent = day;
+        dayCell.appendChild(dayNumber);
+        
+        // Add event indicators
+        const eventsContainer = document.createElement('div');
+        eventsContainer.className = 'calendar-day-events';
+        
+        // Get events for this day
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayEvents = filteredEvents.filter(event => event.date === dateStr);
+        
+        // Add event indicators (max 3)
+        dayEvents.slice(0, 3).forEach(event => {
+          const indicator = document.createElement('div');
+          indicator.className = `calendar-event-indicator ${event.importance}`;
+          eventsContainer.appendChild(indicator);
+        });
+        
+        // Add "more" indicator if there are more than 3 events
+        if (dayEvents.length > 3) {
+          const moreIndicator = document.createElement('div');
+          moreIndicator.style.fontSize = '0.7rem';
+          moreIndicator.style.color = 'var(--text-muted)';
+          moreIndicator.textContent = `+${dayEvents.length - 3} more`;
+          eventsContainer.appendChild(moreIndicator);
+        }
+        
+        dayCell.appendChild(eventsContainer);
+        
+        // Add click event
+        dayCell.addEventListener('click', () => selectDate(currentYear, currentMonth, day));
+        
+        calendarGrid.appendChild(dayCell);
+      }
+    }
+    
+    // Select date
+    function selectDate(year, month, day) {
+      selectedDate = new Date(year, month, day);
+      
+      // Update selected date display
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('selectedDate').textContent = selectedDate.toLocaleDateString('en-US', options);
+      
+      // Re-render calendar to update selection
+      renderCalendar();
+      
+      // Re-render events for selected date
+      renderCalendarEvents();
+    }
+    
+    // Render calendar events
+    function renderCalendarEvents() {
+      const tableBody = document.getElementById('calendarTableBody');
+      tableBody.innerHTML = '';
+      
+      // Get events for selected date
+      const selectedDateStr = formatDateForInput(selectedDate);
+      const eventsForDate = filteredEvents.filter(event => event.date === selectedDateStr);
+      
+      if (eventsForDate.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              No economic events scheduled for this date
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      // Sort events by time
+      eventsForDate.sort((a, b) => a.time.localeCompare(b.time));
+      
+      // Render each event
+      eventsForDate.forEach(event => {
+        const row = document.createElement('tr');
+        row.onclick = () => showEventDetails(event);
+        row.style.cursor = 'pointer';
+        
+        row.innerHTML = `
+          <td class="event-time">${event.time}</td>
+          <td class="event-country">
+            <img src="https://flagcdn.com/24x18/${event.country}.png" alt="${event.countryName}" class="country-flag">
+            <span>${event.countryName}</span>
+          </td>
+          <td>
+            <div class="event-name">
+              ${event.event}
+              <span class="event-importance ${event.importance}"></span>
+            </div>
+          </td>
+          <td>
+            <div class="event-values">
+              <div class="event-value">
+                <span class="event-value-label">Forecast</span>
+                <span class="event-value-number">${event.forecast}</span>
+              </div>
+              <div class="event-value">
+                <span class="event-value-label">Previous</span>
+                <span class="event-value-number">${event.previous}</span>
+              </div>
+              <div class="event-value">
+                <span class="event-value-label">Actual</span>
+                <span class="event-value-number ${getActualClass(event.forecast, event.actual)}">${event.actual}</span>
+              </div>
+            </div>
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+    
+    // Get class for actual value based on comparison with forecast
+    function getActualClass(forecast, actual) {
+      // Simple comparison for demonstration
+      if (forecast.includes('%') && actual.includes('%')) {
+        const forecastNum = parseFloat(forecast);
+        const actualNum = parseFloat(actual);
+        return actualNum >= forecastNum ? 'positive' : 'negative';
+      }
+      return '';
+    }
+    
+    // Render related news
+    function renderRelatedNews() {
+      const newsGrid = document.getElementById('newsGrid');
+      newsGrid.innerHTML = '';
+      
+      relatedNews.forEach(news => {
+        const newsCard = document.createElement('div');
+        newsCard.className = 'news-card';
+        newsCard.onclick = () => showNotification('Opening news article...', 'success');
+        
+        newsCard.innerHTML = `
+          <div class="news-card-header">
+            <div class="news-card-time">${news.time}</div>
+            <div class="news-card-importance ${news.importance}"></div>
+          </div>
+          <div class="news-card-title">${news.title}</div>
+          <div class="news-card-description">${news.description}</div>
+        `;
+        
+        newsGrid.appendChild(newsCard);
+      });
+    }
+    
+    // Apply filters
+    function applyFilters() {
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const country = document.getElementById('countryFilter').value;
+      const importance = document.getElementById('importanceFilter').value;
+      
+      // Filter events
+      filteredEvents = economicEvents.filter(event => {
+        // Date filter
+        if (startDate && event.date < startDate) return false;
+        if (endDate && event.date > endDate) return false;
+        
+        // Country filter
+        if (country !== 'all' && event.country !== country) return false;
+        
+        // Importance filter
+        if (importance !== 'all' && event.importance !== importance) return false;
+        
+        return true;
+      });
+      
+      // Re-render calendar and events
+      renderCalendar();
+      renderCalendarEvents();
+      
+      // Show notification
+      showNotification('Filters applied successfully', 'success');
+    }
+    
+    // Reset filters
+    function resetFilters() {
+      // Reset filter values
+      document.getElementById('startDate').value = formatDateForInput(new Date());
+      
+      const nextWeek = new Date();
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      document.getElementById('endDate').value = formatDateForInput(nextWeek);
+      
+      document.getElementById('countryFilter').value = 'all';
+      document.getElementById('importanceFilter').value = 'all';
+      
+      // Reset filtered events
+      filteredEvents = [...economicEvents];
+      
+      // Re-render calendar and events
+      renderCalendar();
+      renderCalendarEvents();
+      
+      // Show notification
+      showNotification('Filters reset successfully', 'success');
+    }
+    
+    // Show event details modal
+    function showEventDetails(event) {
+      const modal = document.getElementById('eventModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      
+      modalTitle.textContent = event.event;
+      
+      modalBody.innerHTML = `
+        <div class="modal-section">
+          <div class="modal-section-title">Date & Time</div>
+          <div class="modal-section-content">${formatDate(event.date)} at ${event.time}</div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="modal-section-title">Country</div>
+          <div class="modal-section-content">
+            <img src="https://flagcdn.com/24x18/${event.country}.png" alt="${event.countryName}" style="vertical-align: middle; margin-right: 0.5rem;">
+            ${event.countryName}
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="modal-section-title">Importance</div>
+          <div class="modal-section-content">
+            <span class="event-importance ${event.importance}" style="display: inline-block; margin-right: 0.5rem;"></span>
+            ${event.importance.charAt(0).toUpperCase() + event.importance.slice(1)} Impact
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="modal-section-title">Values</div>
+          <div class="modal-section-content">
+            <div class="event-values">
+              <div class="event-value">
+                <span class="event-value-label">Forecast</span>
+                <span class="event-value-number">${event.forecast}</span>
+              </div>
+              <div class="event-value">
+                <span class="event-value-label">Previous</span>
+                <span class="event-value-number">${event.previous}</span>
+              </div>
+              <div class="event-value">
+                <span class="event-value-label">Actual</span>
+                <span class="event-value-number ${getActualClass(event.forecast, event.actual)}">${event.actual}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <div class="modal-section-title">Description</div>
+          <div class="modal-section-content">${event.description}</div>
+        </div>
+      `;
+      
+      modal.classList.add('show');
+    }
+    
+    // Close modal
+    function closeModal() {
+      const modal = document.getElementById('eventModal');
+      modal.classList.remove('show');
+    }
+    
+    // Format date for display
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+    
+    // Simulate real-time updates
+    function simulateRealTimeUpdates() {
+      // In a real application, this would fetch new data from an API
+      // For demonstration, we'll just show a notification
+      showNotification('Economic calendar updated with latest data', 'success');
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      const notificationContent = document.querySelector('.notification-content');
+      
+      notification.className = `notification ${type}`;
+      notificationContent.textContent = message;
+      
+      // Show notification
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeIcon.className = 'fas fa-sun';
+      } else {
+        themeIcon.className = 'fas fa-moon';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('eventModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>

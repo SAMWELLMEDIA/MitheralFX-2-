@@ -1,0 +1,51 @@
+
+[
+  {
+    "id": "event-1",
+    "title": "US Non-Farm Payrolls",
+    "country": "US",
+    "currency": "USD",
+    "time": "14:30",
+    "date": "2024-01-15",
+    "impact": "high",
+    "forecast": "180K",
+    "previous": "199K",
+    "actual": null
+  },
+  {
+    "id": "event-2",
+    "title": "ECB Interest Rate Decision",
+    "country": "EU",
+    "currency": "EUR",
+    "time": "13:45",
+    "date": "2024-01-16",
+    "impact": "high",
+    "forecast": "4.50%",
+    "previous": "4.50%",
+    "actual": null
+  },
+  {
+    "id": "event-3",
+    "title": "UK Manufacturing PMI",
+    "country": "UK",
+    "currency": "GBP",
+    "time": "09:30",
+    "date": "2024-01-17",
+    "impact": "medium",
+    "forecast": "47.2",
+    "previous": "47.0",
+    "actual": null
+  },
+  {
+    "id": "event-4",
+    "title": "Japan CPI YoY",
+    "country": "JP",
+    "currency": "JPY",
+    "time": "23:30",
+    "date": "2024-01-18",
+    "impact": "medium",
+    "forecast": "2.8%",
+    "previous": "2.9%",
+    "actual": null
+  }
+]

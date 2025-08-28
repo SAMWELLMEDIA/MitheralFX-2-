@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promo Code Request - MitheralFX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-primary: #0a0b1e;
+      --bg-secondary: #151933;
+      --bg-card: #1a1f3a;
+      --bg-hover: #252b4a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a9c9;
+      --text-muted: #6b7280;
+      --primary: #ffcc00;
+      --primary-dark: #e6b800;
+      --success: #10b981;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --border: #2a3050;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 2.5rem;
+      box-shadow: 0 20px 50px var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .modal::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .modal-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.25rem;
+    }
+
+    .close-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      transform: rotate(90deg);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .required {
+      color: var(--danger);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: var(--transition);
+      resize: none;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.1);
+    }
+
+    .file-upload {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-upload-box {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      background: var(--bg-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .file-upload:hover .file-upload-box {
+      border-color: var(--primary);
+      background: var(--bg-hover);
+    }
+
+    .file-upload-icon {
+      font-size: 2.5rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-text {
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .file-upload-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .file-preview {
+      margin-top: 1rem;
+      position: relative;
+      display: none;
+    }
+
+    .file-preview img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .file-remove {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+      transition: var(--transition);
+    }
+
+    .file-remove:hover {
+      transform: scale(1.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary), #ffd633);
+      color: #000;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 204, 0, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .submit-btn i.fa-spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      color: var(--success);
+      font-weight: 500;
+      margin-top: 1.5rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .success-message.show {
+      display: flex;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .info-box i {
+      color: var(--info);
+      font-size: 1.25rem;
+      margin-top: 0.125rem;
+    }
+
+    .info-box-content {
+      flex: 1;
+    }
+
+    .info-box-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .info-box-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .progress-container {
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #ffd633);
+      border-radius: 3px;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    @media (max-width: 640px) {
+      .modal {
+        padding: 1.5rem;
+      }
+      
+      .modal-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="modal">
+      <button class="close-btn" id="closeBtn">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="modal-header">
+        <h1 class="modal-title">
+          <i class="fas fa-ticket-alt"></i>
+          Promo Code Request
+        </h1>
+        <p class="modal-subtitle">Apply for a custom promo code to share with your audience</p>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-info-circle"></i>
+        <div class="info-box-content">
+          <div class="info-box-title">Promo Code Benefits</div>
+          <div class="info-box-text">
+            Get a custom promo code to share with your followers. You'll earn commissions when they sign up and trade using your code.
+          </div>
+        </div>
+      </div>
+
+      <form id="promoForm">
+        <div class="form-group">
+          <label for="platform" class="form-label">
+            How do you intend to promote us? <span class="required">*</span>
+          </label>
+          <textarea 
+            id="platform" 
+            class="form-control" 
+            rows="4" 
+            placeholder="Describe your promotion plan, audience size, and marketing channels..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="handle" class="form-label">
+            Social media handle <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="handle" 
+            class="form-control" 
+            placeholder="@yourhandle" 
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="upload" class="form-label">
+            Upload insights (24hr metrics) <span class="required">*</span>
+          </label>
+          <div class="file-upload">
+            <input type="file" id="fileInput" accept="image/*" required>
+            <div class="file-upload-box">
+              <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+              <div class="file-upload-text">Click to upload or drag and drop</div>
+              <div class="file-upload-hint">PNG, JPG, GIF up to 10MB</div>
+            </div>
+          </div>
+          <div class="file-preview" id="filePreview">
+            <img id="previewImg" src="" alt="Preview">
+            <button type="button" class="file-remove" id="fileRemove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <i class="fas fa-paper-plane"></i>
+          <span>Submit Request</span>
+        </button>
+
+        <div class="success-message" id="successMessage">
+          <i class="fas fa-check-circle"></i>
+          <span>Your request has been submitted successfully!</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // DOM elements
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+    const previewImg = document.getElementById('previewImg');
+    const fileRemove = document.getElementById('fileRemove');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const successMessage = document.getElementById('successMessage');
+    const closeBtn = document.getElementById('closeBtn');
+    const promoForm = document.getElementById('promoForm');
+
+    // File upload handlers
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Check file size (limit to 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert('File size must be less than 10MB');
+          fileInput.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          filePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Remove uploaded file
+    fileRemove.addEventListener('click', function() {
+      fileInput.value = '';
+      filePreview.style.display = 'none';
+    });
+
+    // Close modal
+    closeBtn.addEventListener('click', function() {
+      // In a real application, this would close the modal or navigate away
+      if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+        window.history.back();
+      }
+    });
+
+    // Form submission
+    promoForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form values
+      const platform = document.getElementById('platform').value.trim();
+      const handle = document.getElementById('handle').value.trim();
+      const file = fileInput.files[0];
+      
+      // Simple validation
+      if (!platform) {
+        alert('Please describe how you intend to promote us');
+        return;
+      }
+      
+      if (!handle) {
+        alert('Please provide your social media handle');
+        return;
+      }
+      
+      if (!file) {
+        alert('Please upload your insights');
+        return;
+      }
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Submitting...</span>';
+      progressContainer.style.display = 'block';
+      
+      // Simulate form submission with progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        progressFill.style.width = progress + '%';
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          
+          // Show success message
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+            successMessage.classList.add('show');
+            
+            // Reset form
+            setTimeout(() => {
+              promoForm.reset();
+              filePreview.style.display = 'none';
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Submit Request</span>';
+              successMessage.classList.remove('show');
+              progressFill.style.width = '0';
+            }, 3000);
+          }, 500);
+        }
+      }, 200);
+    });
+
+    // Drag and drop functionality
+    const fileUploadBox = document.querySelector('.file-upload-box');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      fileUploadBox.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+      fileUploadBox.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+      fileUploadBox.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+      fileUploadBox.style.borderColor = 'var(--primary)';
+      fileUploadBox.style.background = 'var(--bg-hover)';
+    }
+    
+    function unhighlight() {
+      fileUploadBox.style.borderColor = 'var(--border)';
+      fileUploadBox.style.background = 'var(--bg-secondary)';
+    }
+    
+    fileUploadBox.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      
+      if (files.length > 0) {
+        fileInput.files = files;
+        
+        // Trigger change event
+        const event = new Event('change', { bubbles: true });
+        fileInput.dispatchEvent(event);
+      }
+    }
+  </script>
+</body>
+</html>

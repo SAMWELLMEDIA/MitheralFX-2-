@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MitheralFX - VIP Club</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #050714;
+      --bg-secondary: #0a0e27;
+      --bg-card: #0f1428;
+      --bg-hover: #151b3d;
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a8b2d1;
+      --text-muted: #64748b;
+      
+      /* VIP Tier Colors */
+      --bronze: #cd7f32;
+      --bronze-light: #d4a76a;
+      --silver: #c0c0c0;
+      --silver-light: #e5e5e5;
+      --gold: #ffd700;
+      --gold-light: #ffed4e;
+      --platinum: #e5e4e2;
+      --platinum-light: #f0f0f0;
+      --diamond: #b9f2ff;
+      --diamond-light: #e0f7ff;
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, #ffd700, #ffed4e);
+      --gradient-bronze: linear-gradient(135deg, #cd7f32, #d4a76a);
+      --gradient-silver: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+      --gradient-gold: linear-gradient(135deg, #ffd700, #ffed4e);
+      --gradient-platinum: linear-gradient(135deg, #e5e4e2, #f0f0f0);
+      --gradient-diamond: linear-gradient(135deg, #b9f2ff, #e0f7ff);
+      
+      /* Borders and Shadows */
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.4);
+      --glow: rgba(255, 215, 0, 0.3);
+      
+      /* Transitions */
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --rounded: 20px;
+    }
+    /* Light Theme Colors */
+    body.light-mode {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-hover: #f8fafc;
+      --bg-glass: rgba(0, 0, 0, 0.03);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      
+      --border: rgba(0, 0, 0, 0.1);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --glow: rgba(255, 215, 0, 0.2);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(185, 242, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 20%, rgba(205, 127, 50, 0.1) 0%, transparent 50%);
+      transition: var(--transition);
+    }
+    /* Animated Background Particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: float 20s infinite linear;
+    }
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 10;
+    }
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 100;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+    .theme-toggle i {
+      font-size: 1.25rem;
+      color: var(--gold);
+    }
+    /* VIP Header */
+    .vip-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      box-shadow: 
+        0 20px 40px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px);
+        filter: blur(10px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+    .vip-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .vip-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-shadow: 0 0 30px var(--glow);
+    }
+    .vip-title i {
+      font-size: 2.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .vip-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+    }
+    .vip-tier-badge {
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .vip-tier-badge i {
+      font-size: 1rem;
+    }
+    .vip-tier-badge.bronze {
+      background: var(--gradient-bronze);
+      color: #000;
+    }
+    .vip-tier-badge.silver {
+      background: var(--gradient-silver);
+      color: #000;
+    }
+    .vip-tier-badge.gold {
+      background: var(--gradient-gold);
+      color: #000;
+    }
+    .vip-tier-badge.platinum {
+      background: var(--gradient-platinum);
+      color: #000;
+    }
+    .vip-tier-badge.diamond {
+      background: var(--gradient-diamond);
+      color: #000;
+    }
+    .vip-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .deposit-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .deposit-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--gradient-primary);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .deposit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    .deposit-btn:hover::before {
+      left: 100%;
+    }
+    .deposit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--shadow);
+    }
+    /* Section Title */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      text-align: center;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    /* VIP Tiers Grid */
+    .vip-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .vip-tier-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      box-shadow: 
+        0 15px 35px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: var(--transition);
+      position: relative;
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+    .vip-tier-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .vip-tier-card:hover::before {
+      opacity: 1;
+    }
+    .vip-tier-card.bronze::before {
+      background: var(--bronze);
+    }
+    .vip-tier-card.silver::before {
+      background: var(--silver);
+    }
+    .vip-tier-card.gold::before {
+      background: var(--gold);
+    }
+    .vip-tier-card.platinum::before {
+      background: var(--platinum);
+    }
+    .vip-tier-card.diamond::before {
+      background: var(--diamond);
+    }
+    .vip-tier-card:nth-child(1) { animation-delay: 0.1s; }
+    .vip-tier-card:nth-child(2) { animation-delay: 0.2s; }
+    .vip-tier-card:nth-child(3) { animation-delay: 0.3s; }
+    .vip-tier-card:nth-child(4) { animation-delay: 0.4s; }
+    .vip-tier-card:nth-child(5) { animation-delay: 0.5s; }
+    .vip-tier-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 
+        0 25px 50px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .tier-header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-glass);
+      position: relative;
+      overflow: hidden;
+    }
+    .tier-header::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+    .tier-name {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .tier-name i {
+      font-size: 1.75rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .tier-amount {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .tier-content {
+      padding: 2rem;
+    }
+    .tier-benefits {
+      list-style: none;
+    }
+    .tier-benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: var(--bg-glass);
+      border-radius: 12px;
+      transition: var(--transition);
+    }
+    .tier-benefit:hover {
+      background: rgba(255, 215, 0, 0.05);
+      transform: translateX(5px);
+    }
+    .tier-benefit i {
+      color: var(--gold);
+      font-size: 1.25rem;
+      margin-top: 0.1rem;
+    }
+    .tier-benefit-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .tier-footer {
+      padding: 1rem 2rem;
+      background: var(--bg-hover);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tier-progress {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .tier-join {
+      padding: 0.5rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .tier-join:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+    }
+    /* Progress Bar */
+    .progress-container {
+      margin-top: 3rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .progress-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    .progress-bar {
+      height: 12px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 1s ease;
+      box-shadow: 0 0 10px var(--glow);
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--rounded);
+      padding: 1.25rem 1.75rem;
+      box-shadow: 0 10px 30px var(--shadow);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transform: translateX(400px);
+      transition: var(--transition);
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+    .notification.success {
+      border-left: 4px solid var(--gold);
+    }
+    .notification i {
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+    .notification-content {
+      font-weight: 600;
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .vip-title {
+        font-size: 2.2rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .vip-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .deposit-actions {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .vip-tiers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background Particles -->
+  <div class="particles" id="particles"></div>
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-moon" id="theme-icon"></i>
+  </button>
+  <div class="container">
+    <!-- VIP Header -->
+    <div class="vip-header">
+      <h1 class="vip-title">
+        <i class="fas fa-gem"></i>
+        Welcome to the MitheralFX VIP Club
+      </h1>
+      <div class="vip-status">
+        <span>Your status:</span>
+        <span id="vipTierBadge" class="vip-tier-badge">
+          <i class="fas fa-user"></i>
+          <span id="vipTier">None</span>
+        </span>
+      </div>
+      <div class="vip-stats">
+        <div class="stat-item">
+          <div class="stat-label">Total Deposits</div>
+          <div class="stat-value" id="totalDeposit">$0.00</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Next Tier</div>
+          <div class="stat-value" id="nextTier">Bronze VIP</div>
+        </div>
+      </div>
+      <div class="deposit-actions">
+        <button onclick="simulateDeposit(2000)" class="deposit-btn">
+          <i class="fas fa-plus"></i>
+          <span>Deposit +$2,000</span>
+        </button>
+        <button onclick="simulateDeposit(5000)" class="deposit-btn">
+          <i class="fas fa-plus"></i>
+          <span>Deposit +$5,000</span>
+        </button>
+        <button onclick="simulateDeposit(10000)" class="deposit-btn">
+          <i class="fas fa-plus"></i>
+          <span>Deposit +$10,000</span>
+        </button>
+      </div>
+    </div>
+    <!-- Section Title -->
+    <h2 class="section-title">
+      <i class="fas fa-crown"></i>
+      VIP Tiers & Benefits
+    </h2>
+    <!-- VIP Tiers Grid -->
+    <div class="vip-tiers-grid">
+      <!-- Bronze VIP -->
+      <div class="vip-tier-card bronze">
+        <div class="tier-header">
+          <div class="tier-name">
+            <i class="fas fa-medal"></i>
+            Bronze VIP
+          </div>
+          <div class="tier-amount">$1,000+</div>
+        </div>
+        <div class="tier-content">
+          <ul class="tier-benefits">
+            <li class="tier-benefit">
+              <i class="fas fa-bolt"></i>
+              <div class="tier-benefit-text">Early access to new features</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-headset"></i>
+              <div class="tier-benefit-text">Basic priority support</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-chart-line"></i>
+              <div class="tier-benefit-text">Weekly market analysis</div>
+            </li>
+          </ul>
+        </div>
+        <div class="tier-footer">
+          <div class="tier-progress" id="bronzeProgress">0% to next tier</div>
+          <button class="tier-join" onclick="simulateDeposit(1000)">Join Bronze</button>
+        </div>
+      </div>
+      <!-- Silver VIP -->
+      <div class="vip-tier-card silver">
+        <div class="tier-header">
+          <div class="tier-name">
+            <i class="fas fa-award"></i>
+            Silver VIP
+          </div>
+          <div class="tier-amount">$5,000+</div>
+        </div>
+        <div class="tier-content">
+          <ul class="tier-benefits">
+            <li class="tier-benefit">
+              <i class="fas fa-percentage"></i>
+              <div class="tier-benefit-text">Lower trading fees (0.1%)</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-headset"></i>
+              <div class="tier-benefit-text">Priority support</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-gift"></i>
+              <div class="tier-benefit-text">Monthly bonus credits</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-chart-line"></i>
+              <div class="tier-benefit-text">Advanced trading tools</div>
+            </li>
+          </ul>
+        </div>
+        <div class="tier-footer">
+          <div class="tier-progress" id="silverProgress">0% to next tier</div>
+          <button class="tier-join" onclick="simulateDeposit(5000)">Join Silver</button>
+        </div>
+      </div>
+      <!-- Gold VIP -->
+      <div class="vip-tier-card gold">
+        <div class="tier-header">
+          <div class="tier-name">
+            <i class="fas fa-trophy"></i>
+            Gold VIP
+          </div>
+          <div class="tier-amount">$10,000+</div>
+        </div>
+        <div class="tier-content">
+          <ul class="tier-benefits">
+            <li class="tier-benefit">
+              <i class="fas fa-user-tie"></i>
+              <div class="tier-benefit-text">Personal account manager</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-university"></i>
+              <div class="tier-benefit-text">Custom withdrawal limits</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-chart-pie"></i>
+              <div class="tier-benefit-text">Portfolio analysis</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-phone-alt"></i>
+              <div class="tier-benefit-text">Priority phone support</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-gift"></i>
+              <div class="tier-benefit-text">Exclusive promotions</div>
+            </li>
+          </ul>
+        </div>
+        <div class="tier-footer">
+          <div class="tier-progress" id="goldProgress">0% to next tier</div>
+          <button class="tier-join" onclick="simulateDeposit(10000)">Join Gold</button>
+        </div>
+      </div>
+      <!-- Platinum VIP -->
+      <div class="vip-tier-card platinum">
+        <div class="tier-header">
+          <div class="tier-name">
+            <i class="fas fa-gem"></i>
+            Platinum VIP
+          </div>
+          <div class="tier-amount">$25,000+</div>
+        </div>
+        <div class="tier-content">
+          <ul class="tier-benefits">
+            <li class="tier-benefit">
+              <i class="fas fa-phone-volume"></i>
+              <div class="tier-benefit-text">24/7 direct support</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-video"></i>
+              <div class="tier-benefit-text">Exclusive trading webinars</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-chart-line"></i>
+              <div class="tier-benefit-text">Personal trading signals</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-user-friends"></i>
+              <div class="tier-benefit-text">Referral program enhancements</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-star"></i>
+              <div class="tier-benefit-text">VIP exclusive events</div>
+            </li>
+          </ul>
+        </div>
+        <div class="tier-footer">
+          <div class="tier-progress" id="platinumProgress">0% to next tier</div>
+          <button class="tier-join" onclick="simulateDeposit(25000)">Join Platinum</button>
+        </div>
+      </div>
+      <!-- Diamond VIP -->
+      <div class="vip-tier-card diamond">
+        <div class="tier-header">
+          <div class="tier-name">
+            <i class="fas fa-crown"></i>
+            Diamond VIP
+          </div>
+          <div class="tier-amount">$50,000+</div>
+        </div>
+        <div class="tier-content">
+          <ul class="tier-benefits">
+            <li class="tier-benefit">
+              <i class="fas fa-user-tie"></i>
+              <div class="tier-benefit-text">Dedicated account manager</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-chart-line"></i>
+              <div class="tier-benefit-text">Personal trading analyst</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-flask"></i>
+              <div class="tier-benefit-text">Access to beta products</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-plane"></i>
+              <div class="tier-benefit-text">Travel & event invitations</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-gift"></i>
+              <div class="tier-benefit-text">Luxury gift packages</div>
+            </li>
+            <li class="tier-benefit">
+              <i class="fas fa-handshake"></i>
+              <div class="tier-benefit-text">Partnership opportunities</div>
+            </li>
+          </ul>
+        </div>
+        <div class="tier-footer">
+          <div class="tier-progress" id="diamondProgress">MAX TIER</div>
+          <button class="tier-join" onclick="simulateDeposit(50000)">Join Diamond</button>
+        </div>
+      </div>
+    </div>
+    <!-- Progress Section -->
+    <div class="progress-container">
+      <div class="progress-title">Your VIP Progress</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-labels">
+        <span id="progressStart">$0</span>
+        <span id="progressEnd">Diamond VIP</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <div class="notification-content"></div>
+  </div>
+
+  <script>
+    // VIP Tiers configuration
+    const vipTiers = [
+      { name: 'Diamond VIP', min: 50000, icon: 'fas fa-crown', class: 'diamond' },
+      { name: 'Platinum VIP', min: 25000, icon: 'fas fa-gem', class: 'platinum' },
+      { name: 'Gold VIP', min: 10000, icon: 'fas fa-trophy', class: 'gold' },
+      { name: 'Silver VIP', min: 5000, icon: 'fas fa-award', class: 'silver' },
+      { name: 'Bronze VIP', min: 1000, icon: 'fas fa-medal', class: 'bronze' }
+    ];
+
+    // Function to get current VIP tier based on deposit amount
+    function getCurrentTier(amount) {
+      for (let tier of vipTiers) {
+        if (amount >= tier.min) {
+          return tier;
+        }
+      }
+      return null;
+    }
+
+    // Function to get next VIP tier
+    function getNextTier(amount) {
+      for (let i = vipTiers.length - 1; i >= 0; i--) {
+        if (amount < vipTiers[i].min) {
+          return vipTiers[i];
+        }
+      }
+      return null; // Already at the highest tier
+    }
+
+    // Function to update VIP status display
+    function updateVIPStatus() {
+      const totalDeposit = parseFloat(localStorage.getItem('totalDeposit') || '0');
+      
+      // Update total deposit display
+      document.getElementById('totalDeposit').textContent = `$${totalDeposit.toLocaleString()}`;
+      
+      // Get current and next tier
+      const currentTier = getCurrentTier(totalDeposit);
+      const nextTier = getNextTier(totalDeposit);
+      
+      // Update VIP tier badge
+      const tierBadge = document.getElementById('vipTierBadge');
+      const tierName = document.getElementById('vipTier');
+      
+      if (currentTier) {
+        tierBadge.className = `vip-tier-badge ${currentTier.class}`;
+        tierName.innerHTML = `<i class="${currentTier.icon}"></i> ${currentTier.name}`;
+      } else {
+        tierBadge.className = 'vip-tier-badge';
+        tierName.innerHTML = '<i class="fas fa-user"></i> None';
+      }
+      
+      // Update next tier display
+      const nextTierElement = document.getElementById('nextTier');
+      if (nextTier) {
+        nextTierElement.textContent = nextTier.name;
+      } else {
+        nextTierElement.textContent = 'MAX';
+      }
+      
+      // Update progress bar
+      updateProgressBar(totalDeposit, currentTier, nextTier);
+      
+      // Update individual tier progress indicators
+      updateTierProgress(totalDeposit);
+    }
+
+    // Function to update the main progress bar
+    function updateProgressBar(totalDeposit, currentTier, nextTier) {
+      const progressFill = document.getElementById('progressFill');
+      const progressStart = document.getElementById('progressStart');
+      const progressEnd = document.getElementById('progressEnd');
+      
+      if (!nextTier) {
+        // Already at the highest tier
+        progressFill.style.width = '100%';
+        progressStart.textContent = `$${currentTier.min.toLocaleString()}`;
+        progressEnd.textContent = 'MAX';
+        return;
+      }
+      
+      if (!currentTier) {
+        // Not in any tier yet
+        const progress = (totalDeposit / nextTier.min) * 100;
+        progressFill.style.width = `${Math.min(progress, 100)}%`;
+        progressStart.textContent = '$0';
+        progressEnd.textContent = nextTier.name;
+        return;
+      }
+      
+      // Between tiers
+      const currentMin = currentTier.min;
+      const nextMin = nextTier.min;
+      const progress = ((totalDeposit - currentMin) / (nextMin - currentMin)) * 100;
+      progressFill.style.width = `${Math.min(progress, 100)}%`;
+      progressStart.textContent = `$${currentMin.toLocaleString()}`;
+      progressEnd.textContent = nextTier.name;
+    }
+
+    // Function to update individual tier progress indicators
+    function updateTierProgress(totalDeposit) {
+      // For each tier, calculate progress to next tier (or 100% if at max)
+      const tiers = ['bronze', 'silver', 'gold', 'platinum', 'diamond'];
+      
+      tiers.forEach((tierClass, index) => {
+        const tier = vipTiers.find(t => t.class === tierClass);
+        const progressElement = document.getElementById(`${tierClass}Progress`);
+        
+        if (!progressElement) return;
+        
+        if (totalDeposit >= tier.min) {
+          // Check if there's a next tier
+          const nextTierIndex = index - 1; // Tiers are in descending order
+          if (nextTierIndex >= 0) {
+            const nextTier = vipTiers[nextTierIndex];
+            const progress = ((totalDeposit - tier.min) / (nextTier.min - tier.min)) * 100;
+            progressElement.textContent = `${Math.min(Math.round(progress), 100)}% to next tier`;
+          } else {
+            progressElement.textContent = 'MAX TIER';
+          }
+        } else {
+          const prevTier = index < tiers.length - 1 ? vipTiers[index + 1] : null;
+          const startAmount = prevTier ? prevTier.min : 0;
+          const progress = ((totalDeposit - startAmount) / (tier.min - startAmount)) * 100;
+          progressElement.textContent = `${Math.round(progress)}% to ${tier.name}`;
+        }
+      });
+    }
+
+    // Function to simulate a deposit
+    function simulateDeposit(amount) {
+      let totalDeposit = parseFloat(localStorage.getItem('totalDeposit') || '0');
+      const oldTier = getCurrentTier(totalDeposit);
+      
+      totalDeposit += amount;
+      localStorage.setItem('totalDeposit', totalDeposit);
+      
+      const newTier = getCurrentTier(totalDeposit);
+      
+      // Update the display
+      updateVIPStatus();
+      
+      // Show notification
+      showNotification(`Deposit successful! +$${amount.toLocaleString()}`, 'success');
+      
+      // If tier changed, show additional notification
+      if (oldTier !== newTier && newTier) {
+        setTimeout(() => {
+          showNotification(`Congratulations! You've reached ${newTier.name}!`, 'success');
+        }, 1000);
+      }
+    }
+
+    // Function to show notification
+    function showNotification(message, type = 'success') {
+      const notification = document.querySelector('.notification');
+      const notificationContent = document.querySelector('.notification-content');
+      
+      notification.className = `notification ${type}`;
+      notificationContent.textContent = message;
+      
+      // Show notification
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Function to toggle theme
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('theme-icon');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeIcon.className = 'fas fa-sun';
+      } else {
+        themeIcon.className = 'fas fa-moon';
+      }
+      
+      // Save theme preference
+      localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+    }
+
+    // Function to generate particles
+    function generateParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random position
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        
+        // Random size
+        const size = Math.random() * 4 + 2;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        
+        // Apply styles
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load saved theme
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+      }
+      
+      // Generate particles
+      generateParticles();
+      
+      // Update VIP status
+      updateVIPStatus();
+    });
+  </script>
+</body>
+</html>

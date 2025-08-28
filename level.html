@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Level - MitheralFX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1d1e5a;
+      --secondary: #2a2b75;
+      --accent: #ffcc00;
+      --accent-hover: #ffd633;
+      --tertiary: #37389b;
+      --text: #ffffff;
+      --text-secondary: #b8b9d6;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1d1e5a 0%, #0a0b2e 100%);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo i {
+      color: var(--accent);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .user-info {
+      text-align: right;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .user-tier {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .level-card {
+      background: rgba(42, 43, 117, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--warning));
+    }
+
+    .level-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .level-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .level-badge {
+      font-size: 2rem;
+    }
+
+    .level-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .info-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .progress-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      height: 24px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--warning));
+      width: 0%;
+      transition: width 1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .stats-card {
+      background: rgba(42, 43, 117, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      height: fit-content;
+    }
+
+    .stats-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .stat-value {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .levels-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(42, 43, 117, 0.5);
+      padding: 0.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .levels-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .level-box {
+      background: rgba(42, 43, 117, 0.5);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-box.current {
+      background: rgba(255, 204, 0, 0.15);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+    }
+
+    .level-box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .level-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .level-box.current .level-icon {
+      color: var(--accent);
+    }
+
+    .level-box.locked .level-icon {
+      color: var(--text-secondary);
+    }
+
+    .level-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .level-requirement {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .level-reward {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reward-icon {
+      color: var(--accent);
+    }
+
+    .current-indicator {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent);
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0 0 0 8px;
+    }
+
+    .achievements-section {
+      margin-bottom: 2rem;
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .achievement {
+      background: rgba(42, 43, 117, 0.5);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .achievement.unlocked {
+      background: rgba(76, 175, 80, 0.15);
+      border-color: var(--success);
+    }
+
+    .achievement:hover {
+      transform: translateY(-5px);
+    }
+
+    .achievement-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .achievement.unlocked .achievement-icon {
+      color: var(--success);
+    }
+
+    .achievement.locked .achievement-icon {
+      color: var(--text-secondary);
+    }
+
+    .achievement-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .achievement-desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: var(--secondary);
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .trade-history {
+      margin-top: 1rem;
+    }
+
+    .trade-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .trade-item:last-child {
+      border-bottom: none;
+    }
+
+    .trade-date {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .trade-amount {
+      font-weight: 600;
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--primary);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      font-size: 1rem;
+      animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s forwards;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      to {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .level-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .levels-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>MitheralFX</span>
+      </div>
+      <div class="user-profile">
+        <div class="user-info">
+          <div class="user-name">Alex Johnson</div>
+          <div class="user-tier" id="userTier">Newbie</div>
+        </div>
+        <div class="user-avatar">AJ</div>
+      </div>
+    </header>
+
+    <h1><i class="fas fa-bullseye"></i> User Trading Level</h1>
+
+    <div class="dashboard">
+      <div class="level-card">
+        <div class="level-header">
+          <div class="level-name">
+            <span id="levelBadge" class="level-badge"><i class="fas fa-medal"></i></span>
+            <span id="levelName">Level 1 - Beginner</span>
+          </div>
+        </div>
+        
+        <div class="level-info">
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-chart-line"></i>
+              <span>Trade Volume</span>
+            </div>
+            <div class="info-value" id="tradeVolume">$0.00</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-exchange-alt"></i>
+              <span>Total Trades</span>
+            </div>
+            <div class="info-value" id="tradeCount">0</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-clock"></i>
+              <span>Last Trade</span>
+            </div>
+            <div class="info-value" id="lastTradeDate">N/A</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-gift"></i>
+              <span>Current Reward</span>
+            </div>
+            <div class="info-value" id="reward">Free signals</div>
+          </div>
+        </div>
+        
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text">
+          <span id="progressText">0 / 10 trades</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="simulateTrade()">
+            <i class="fas fa-plus"></i> Simulate Trade
+          </button>
+          <button class="btn btn-secondary" onclick="showTradeHistory()">
+            <i class="fas fa-history"></i> Trade History
+          </button>
+        </div>
+      </div>
+      
+      <div class="stats-card">
+        <h2><i class="fas fa-chart-pie"></i> Trading Statistics</h2>
+        <div class="stat-item">
+          <span class="stat-label">Win Rate</span>
+          <span class="stat-value" id="winRate">0%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Profit/Loss</span>
+          <span class="stat-value" id="profitLoss">$0.00</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Streak</span>
+          <span class="stat-value" id="bestStreak">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Achievements</span>
+          <span class="stat-value" id="achievementCount">0/10</span>
+        </div>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="resetProgress()">
+          <i class="fas fa-redo"></i> Reset Progress
+        </button>
+      </div>
+    </div>
+
+    <div class="levels-section">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-chart-bar"></i> Levels Overview</h2>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchLevelTab('levels')">Levels</button>
+        <button class="tab-btn" onclick="switchLevelTab('achievements')">Achievements</button>
+      </div>
+      
+      <div id="levelsTab" class="levels-container">
+        <!-- Level cards will be generated here -->
+      </div>
+      
+      <div id="achievementsTab" class="achievements-grid" style="display: none;">
+        <!-- Achievement cards will be generated here -->
+      </div>
+    </div>
+  </div>
+
+  <div id="tradeHistoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Trade History</h2>
+        <button class="modal-close" onclick="closeModal('tradeHistoryModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="tradeHistoryList" class="trade-history">
+          <!-- Trade history will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Enhanced level data with more details
+    const levels = [
+      { 
+        id: 1, 
+        badge: '<i class="fas fa-medal"></i>', 
+        name: "Level 1 - Beginner", 
+        min: 0, 
+        max: 9,
+        title: "Newbie", 
+        reward: "Free signals",
+        description: "Start your trading journey with basic market insights"
+      },
+      { 
+        id: 2, 
+        badge: '<i class="fas fa-medal"></i>', 
+        name: "Level 2 - Trader", 
+        min: 10, 
+        max: 49,
+        title: "Intermediate", 
+        reward: "Lower fees",
+        description: "Gain access to reduced trading fees"
+      },
+      { 
+        id: 3, 
+        badge: '<i class="fas fa-award"></i>', 
+        name: "Level 3 - Pro Trader", 
+        min: 50, 
+        max: 99,
+        title: "Advanced", 
+        reward: "Priority support",
+        description: "Get priority access to our support team"
+      },
+      { 
+        id: 4, 
+        badge: '<i class="fas fa-trophy"></i>', 
+        name: "Level 4 - Elite", 
+        min: 100, 
+        max: 249,
+        title: "Expert", 
+        reward: "Personal manager",
+        description: "Receive personalized service from a dedicated account manager"
+      },
+      { 
+        id: 5, 
+        badge: '<i class="fas fa-crown"></i>', 
+        name: "Level 5 - Legend", 
+        min: 250, 
+        max: Infinity,
+        title: "Master", 
+        reward: "VIP Airdrops",
+        description: "Enjoy exclusive VIP benefits and airdrops"
+      }
+    ];
+
+    // Achievement data
+    const achievements = [
+      { id: 1, icon: '<i class="fas fa-star"></i>', title: "First Trade", desc: "Make your first trade", requirement: 1, type: "trades" },
+      { id: 2, icon: '<i class="fas fa-fire"></i>', title: "On Fire", desc: "Make 5 trades in one day", requirement: 5, type: "streak" },
+      { id: 3, icon: '<i class="fas fa-chart-line"></i>', title: "Volume Maker", desc: "Reach $1000 in trade volume", requirement: 1000, type: "volume" },
+      { id: 4, icon: '<i class="fas fa-hand-holding-usd"></i>', title: "Profit Maker", desc: "Make $500 in profit", requirement: 500, type: "profit" },
+      { id: 5, icon: '<i class="fas fa-calendar-check"></i>', title: "Consistent", desc: "Trade for 7 consecutive days", requirement: 7, type: "consistency" },
+      { id: 6, icon: '<i class="fas fa-coins"></i>', title: "Big Spender", desc: "Reach $5000 in trade volume", requirement: 5000, type: "volume" },
+      { id: 7, icon: '<i class="fas fa-trophy"></i>', title: "Level Master", desc: "Reach Level 3", requirement: 3, type: "level" },
+      { id: 8, icon: '<i class="fas fa-bolt"></i>', title: "Speed Trader", desc: "Make 10 trades in one hour", requirement: 10, type: "speed" },
+      { id: 9, icon: '<i class="fas fa-gem"></i>', title: "Diamond Trader", desc: "Reach $10,000 in trade volume", requirement: 10000, type: "volume" },
+      { id: 10, icon: '<i class="fas fa-crown"></i>', title: "Legendary", desc: "Reach Level 5", requirement: 5, type: "level" }
+    ];
+
+    // Initialize data
+    let userData = {
+      tradeCount: parseInt(localStorage.getItem('tradeCount') || '0'),
+      tradeVolume: parseFloat(localStorage.getItem('tradeVolume') || '0'),
+      profitLoss: parseFloat(localStorage.getItem('profitLoss') || '0'),
+      lastTradeDate: localStorage.getItem('lastTradeDate') || null,
+      tradeHistory: JSON.parse(localStorage.getItem('tradeHistory') || '[]'),
+      winCount: parseInt(localStorage.getItem('winCount') || '0'),
+      bestStreak: parseInt(localStorage.getItem('bestStreak') || '0'),
+      currentStreak: parseInt(localStorage.getItem('currentStreak') || '0'),
+      consecutiveDays: parseInt(localStorage.getItem('consecutiveDays') || '0'),
+      lastTradeDay: localStorage.getItem('lastTradeDay') || null,
+      unlockedAchievements: JSON.parse(localStorage.getItem('unlockedAchievements') || '[]')
+    };
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateUI();
+      renderLevels();
+      renderAchievements();
+      updateStats();
+    });
+
+    // Update UI elements
+    function updateUI() {
+      const currentLevel = getCurrentLevel(userData.tradeCount);
+      const nextLevel = levels.find(l => l.id > currentLevel.id);
+      
+      document.getElementById('levelName').textContent = currentLevel.name;
+      document.getElementById('levelBadge').innerHTML = currentLevel.badge;
+      document.getElementById('userTier').textContent = currentLevel.title;
+      document.getElementById('reward').textContent = currentLevel.reward;
+      document.getElementById('tradeCount').textContent = userData.tradeCount;
+      document.getElementById('tradeVolume').textContent = `$${userData.tradeVolume.toFixed(2)}`;
+      document.getElementById('lastTradeDate').textContent = userData.lastTradeDate || 'N/A';
+      
+      // Update progress bar
+      const min = currentLevel.min;
+      const max = nextLevel ? nextLevel.min : currentLevel.max;
+      const progress = nextLevel ? ((userData.tradeCount - min) / (max - min)) * 100 : 100;
+      
+      document.getElementById('progressBar').style.width = `${progress}%`;
+      document.getElementById('progressText').textContent = `${userData.tradeCount} / ${max} trades`;
+      document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+    }
+
+    // Update statistics
+    function updateStats() {
+      const winRate = userData.tradeCount > 0 ? Math.round((userData.winCount / userData.tradeCount) * 100) : 0;
+      document.getElementById('winRate').textContent = `${winRate}%`;
+      document.getElementById('profitLoss').textContent = `$${userData.profitLoss.toFixed(2)}`;
+      document.getElementById('bestStreak').textContent = userData.bestStreak;
+      document.getElementById('achievementCount').textContent = `${userData.unlockedAchievements.length}/${achievements.length}`;
+    }
+
+    // Get current level based on trade count
+    function getCurrentLevel(tradeCount) {
+      return levels.slice().reverse().find(level => tradeCount >= level.min);
+    }
+
+    // Render level cards
+    function renderLevels() {
+      const container = document.getElementById('levelsTab');
+      container.innerHTML = '';
+      
+      const currentLevel = getCurrentLevel(userData.tradeCount);
+      
+      levels.forEach(level => {
+        const isCurrent = level.id === currentLevel.id;
+        const isLocked = userData.tradeCount < level.min;
+        
+        const levelCard = document.createElement('div');
+        levelCard.className = `level-box ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''}`;
+        
+        levelCard.innerHTML = `
+          ${isCurrent ? '<div class="current-indicator">CURRENT</div>' : ''}
+          <div class="level-icon">${level.badge}</div>
+          <div class="level-title">${level.name}</div>
+          <div class="level-requirement">${level.min}+ trades</div>
+          <div class="level-reward">
+            <i class="fas fa-gift reward-icon"></i>
+            <span>${level.reward}</span>
+          </div>
+        `;
+        
+        container.appendChild(levelCard);
+      });
+    }
+
+    // Render achievement cards
+    function renderAchievements() {
+      const container = document.getElementById('achievementsTab');
+      container.innerHTML = '';
+      
+      achievements.forEach(achievement => {
+        const isUnlocked = userData.unlockedAchievements.includes(achievement.id);
+        
+        const achievementCard = document.createElement('div');
+        achievementCard.className = `achievement ${isUnlocked ? 'unlocked' : 'locked'}`;
+        
+        achievementCard.innerHTML = `
+          <div class="achievement-icon">${achievement.icon}</div>
+          <div class="achievement-title">${achievement.title}</div>
+          <div class="achievement-desc">${achievement.desc}</div>
+        `;
+        
+        container.appendChild(achievementCard);
+      });
+    }
+
+    // Switch between levels and achievements tabs
+    function switchLevelTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      if (tab === 'levels') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('levelsTab').style.display = 'grid';
+        document.getElementById('achievementsTab').style.display = 'none';
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('levelsTab').style.display = 'none';
+        document.getElementById('achievementsTab').style.display = 'grid';
+      }
+    }
+
+    // Simulate a trade
+    function simulateTrade() {
+      // Generate random trade amount between $50 and $500
+      const tradeAmount = Math.floor(Math.random() * 450) + 50;
+      const isWin = Math.random() > 0.4; // 60% win rate
+      const profitLoss = isWin ? Math.floor(tradeAmount * (Math.random() * 0.2 + 0.05)) : -Math.floor(tradeAmount * (Math.random() * 0.15 + 0.05));
+      
+      // Update user data
+      userData.tradeCount += 1;
+      userData.tradeVolume += tradeAmount;
+      userData.profitLoss += profitLoss;
+      
+      // Update win count and streak
+      if (isWin) {
+        userData.winCount += 1;
+        userData.currentStreak += 1;
+        if (userData.currentStreak > userData.bestStreak) {
+          userData.bestStreak = userData.currentStreak;
+        }
+      } else {
+        userData.currentStreak = 0;
+      }
+      
+      // Update consecutive days
+      const today = new Date().toISOString().split('T')[0];
+      if (userData.lastTradeDay === today) {
+        // Already traded today
+      } else if (userData.lastTradeDay === getYesterday()) {
+        // Traded yesterday, increment consecutive days
+        userData.consecutiveDays += 1;
+      } else {
+        // Didn't trade yesterday, reset consecutive days
+        userData.consecutiveDays = 1;
+      }
+      userData.lastTradeDay = today;
+      
+      // Update last trade date
+      const now = new Date();
+      userData.lastTradeDate = now.toLocaleDateString();
+      
+      // Add to trade history
+      userData.tradeHistory.unshift({
+        date: now.toLocaleString(),
+        amount: tradeAmount,
+        profitLoss: profitLoss,
+        isWin: isWin
+      });
+      
+      // Keep only last 20 trades in history
+      if (userData.tradeHistory.length > 20) {
+        userData.tradeHistory = userData.tradeHistory.slice(0, 20);
+      }
+      
+      // Check for achievements
+      checkAchievements();
+      
+      // Save to localStorage
+      saveUserData();
+      
+      // Update UI
+      updateUI();
+      updateStats();
+      
+      // Show toast notification
+      const levelBefore = getCurrentLevel(userData.tradeCount - 1);
+      const levelAfter = getCurrentLevel(userData.tradeCount);
+      
+      if (levelBefore.id < levelAfter.id) {
+        showToast(`🎉 Congratulations! You've reached ${levelAfter.name}!`);
+      } else {
+        showToast(`Trade completed! ${isWin ? '+' : ''}$${Math.abs(profitLoss).toFixed(2)}`);
+      }
+    }
+
+    // Check for unlocked achievements
+    function checkAchievements() {
+      let newAchievements = [];
+      
+      achievements.forEach(achievement => {
+        if (!userData.unlockedAchievements.includes(achievement.id)) {
+          let unlocked = false;
+          
+          switch(achievement.type) {
+            case 'trades':
+              unlocked = userData.tradeCount >= achievement.requirement;
+              break;
+            case 'volume':
+              unlocked = userData.tradeVolume >= achievement.requirement;
+              break;
+            case 'profit':
+              unlocked = userData.profitLoss >= achievement.requirement;
+              break;
+            case 'level':
+              const currentLevel = getCurrentLevel(userData.tradeCount);
+              unlocked = currentLevel.id >= achievement.requirement;
+              break;
+            case 'streak':
+              unlocked = userData.currentStreak >= achievement.requirement;
+              break;
+            case 'consistency':
+              unlocked = userData.consecutiveDays >= achievement.requirement;
+              break;
+          }
+          
+          if (unlocked) {
+            userData.unlockedAchievements.push(achievement.id);
+            newAchievements.push(achievement);
+          }
+        }
+      });
+      
+      // Show notifications for new achievements
+      newAchievements.forEach(achievement => {
+        setTimeout(() => {
+          showToast(`🏆 Achievement Unlocked: ${achievement.title}!`);
+        }, 500);
+      });
+      
+      if (newAchievements.length > 0) {
+        renderAchievements();
+        updateStats();
+      }
+    }
+
+    // Get yesterday's date in YYYY-MM-DD format
+    function getYesterday() {
+      const date = new Date();
+      date.setDate(date.getDate() - 1);
+      return date.toISOString().split('T')[0];
+    }
+
+    // Save user data to localStorage
+    function saveUserData() {
+      localStorage.setItem('tradeCount', userData.tradeCount);
+      localStorage.setItem('tradeVolume', userData.tradeVolume);
+      localStorage.setItem('profitLoss', userData.profitLoss);
+      localStorage.setItem('lastTradeDate', userData.lastTradeDate);
+      localStorage.setItem('tradeHistory', JSON.stringify(userData.tradeHistory));
+      localStorage.setItem('winCount', userData.winCount);
+      localStorage.setItem('bestStreak', userData.bestStreak);
+      localStorage.setItem('currentStreak', userData.currentStreak);
+      localStorage.setItem('consecutiveDays', userData.consecutiveDays);
+      localStorage.setItem('lastTradeDay', userData.lastTradeDay);
+      localStorage.setItem('unlockedAchievements', JSON.stringify(userData.unlockedAchievements));
+    }
+
+    // Show trade history modal
+    function showTradeHistory() {
+      const modal = document.getElementById('tradeHistoryModal');
+      const historyList = document.getElementById('tradeHistoryList');
+      
+      if (userData.tradeHistory.length === 0) {
+        historyList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No trade history available.</p>';
+      } else {
+        historyList.innerHTML = userData.tradeHistory.map(trade => `
+          <div class="trade-item">
+            <div>
+              <div>${trade.date}</div>
+              <div class="trade-date">$${trade.amount.toFixed(2)}</div>
+            </div>
+            <div class="trade-amount" style="color: ${trade.isWin ? 'var(--success)' : 'var(--danger)'}">
+              ${trade.isWin ? '+' : ''}$${Math.abs(trade.profitLoss).toFixed(2)}
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      modal.style.display = 'flex';
+    }
+
+    // Close modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Reset progress
+    function resetProgress() {
+      if (confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
+        userData = {
+          tradeCount: 0,
+          tradeVolume: 0,
+          profitLoss: 0,
+          lastTradeDate: null,
+          tradeHistory: [],
+          winCount: 0,
+          bestStreak: 0,
+          currentStreak: 0,
+          consecutiveDays: 0,
+          lastTradeDay: null,
+          unlockedAchievements: []
+        };
+        
+        // Clear localStorage
+        localStorage.removeItem('tradeCount');
+        localStorage.removeItem('tradeVolume');
+        localStorage.removeItem('profitLoss');
+        localStorage.removeItem('lastTradeDate');
+        localStorage.removeItem('tradeHistory');
+        localStorage.removeItem('winCount');
+        localStorage.removeItem('bestStreak');
+        localStorage.removeItem('currentStreak');
+        localStorage.removeItem('consecutiveDays');
+        localStorage.removeItem('lastTradeDay');
+        localStorage.removeItem('unlockedAchievements');
+        
+        // Update UI
+        updateUI();
+        renderLevels();
+        renderAchievements();
+        updateStats();
+        
+        showToast("Progress has been reset!");
+      }
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.style.display = 'block';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('tradeHistoryModal');
+      if (event.target === modal) {
+        closeModal('tradeHistoryModal');
+      }
+    }
+  </script>
+</body>
+</html>
